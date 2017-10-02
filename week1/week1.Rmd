@@ -176,6 +176,7 @@ slide_level: 2
 - Check out [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml)
 - Comment your code!
     - `#` indicates a comment in R.
+    - `Ctrl+Shift+c` comments the line.
 
 \centerline{
   \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{./graphics/styleguide.png}
@@ -551,11 +552,7 @@ l[[2]][[1]]
 
 ## Investments Problem Set 1
 - You will submit a list of answers.
-```{r}
+```{r,tidy=TRUE,size="footnotesize"}
 hw <- source("./lecture1p.R")$value
 str(hw)
 ```
-## Lab 1
-\begin{center}
-\Large Let's work on Lab 1.
-\end{center}
