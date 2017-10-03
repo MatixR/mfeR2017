@@ -139,7 +139,7 @@ slide_level: 2
 ## Course Materials
 
 - https://github.com/brettdunn/mfeR2017
-- The materials for this course were created in RStudio, using R Markdown.
+- The materials for this course were created in RStudio, using [R Markdown](http://rmarkdown.rstudio.com/lesson-1.html).
 - To create your own RStudio project:
     - File / New Project / Version Control / Git
     - Enter the URL
@@ -166,8 +166,8 @@ slide_level: 2
     - `Ctrl+Enter` sends the line at the cursor to the console.
     - `Ctrl+Shift+S` runs the entire file.
     - Help/Keyboard Shortcuts lists all the available shortcuts.
+        - [RStudio Keyboard Shortcuts](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts).
         - Check out the multiple cursors.
-        - [RStudio Keyboard Shortcuts](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts)
 - For larger tasks with many files, create an R project.
 - Visual Studio is similar.
 
@@ -227,7 +227,8 @@ help(package = "xts")  # gets help on the xts package
 - A variable can also hold any R object such as a function, the result of an analysis, a plot, etc.
 - Variable assignment is done with  `<-` (`Alt+-` in RStudio).
     - `=` works, but there are reasons to prefer `<-`.
-- We can remove variables (e.g. to free up memory) with the `rm` function. `gc()` runs garbage collection.
+- We can remove variables (e.g. to free up memory) with the `rm` function. 
+    - `gc()` runs garbage collection.
     - `rm(list=ls())` clears the workspace.
 
 ```{r}
@@ -334,9 +335,9 @@ rep(c(1,2), each=2)
 ```{r}
 x <- c(TRUE, FALSE, TRUE, FALSE)
 length(x)
-x <- c()  # x is NULL
+x <- c()     # x is NULL
 1:length(x)  # that could mess you up in a for loop
-seq(x) # a safe way to loop through a vector
+seq(x)       # a safe way to loop through a vector
 ```
 
 ## Accessing Elements of Vectors
@@ -346,8 +347,8 @@ seq(x) # a safe way to loop through a vector
 - The `[` function can take a vector as an arguments.
 ```{r}
 x <- c("a", "b", "c", "d")
-x[1]  # access the first element
-x[c(1, 3)]  # access elements 1 and 3
+x[1]                    # access the first element
+x[c(1, 3)]              # access elements 1 and 3
 x[c(TRUE, FALSE, TRUE, FALSE)]  # second way
 ```
 
@@ -370,7 +371,7 @@ x <- 1:3
 names(x) <- c("A","B","C")
 x <- c(A=1, B=2, C=3 )  # another way
 x["B"]
-as.vector(x)  # the names are removed
+as.vector(x)            # the names are removed
 ```
 
 ## Recycling
@@ -396,11 +397,15 @@ x == y
 
 ## Logical Operations (2)
 - `&&`, `||`, `any()`, and `all()` return a length-one vector.
+- The shorter forms are vectorized, meaning they can return a vector:
 ```{r}
-x <- c(TRUE,FALSE,TRUE)
-y <- c(TRUE,FALSE,FALSE)
-x && y
+x <- c(FALSE,TRUE,TRUE)
+y <- c(TRUE,TRUE,FALSE)
 x & y
+```
+- The longer form evaluates left to right examining only the first element of each vector:
+```{r}
+x && y
 ```
 
 ## Filtering
@@ -415,8 +420,10 @@ x[y]
 - Filtering amounts to generating filtering indices (i.e. vectors of logicals).
 ```{r}
 x <- c(5, 2, -3, 8)
-idx <- x*x > 8  # same as ">"(x*x, 8) - 8 is recycled!
+idx <- x*x > 8  
 idx
+# another way
+">"(x*x, 8)
 ```
 
 ## Assigning to a Filter
@@ -424,12 +431,12 @@ idx
     - This allows you change elements that meet certain criteria.
 ```{r}
 x <- 1:6
-x[x < 2] <- NA
+x[x <= 2] <- NA
 x
 ```
 
 ## Filtering with `subset()`
-- The subset function filters and removes any `NA`s.
+- The `subset` function filters and removes any `NA`s.
 ```{r}
 x <- c(3, 1:5, NA, 79)
 x
@@ -516,7 +523,7 @@ mylist[c(1,3)]
 
 
 ## Simplfying vs Preserving Subsetting
-- Note that `[[` simplifies the result, returning a vector:
+- Note that `[[` simplifies the result, returning a vector (`str` displays the structure of an R object):
 ```{r}
 str(mylist[[2]])
 ```
@@ -552,7 +559,7 @@ l[[2]][[1]]
 
 ## Investments Problem Set 1
 - You will submit a list of answers.
-```{r,tidy=TRUE,size="footnotesize"}
+```{r}
 hw <- source("./lecture1p.R")$value
 str(hw)
 ```
