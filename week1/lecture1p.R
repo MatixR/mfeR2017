@@ -1,7 +1,8 @@
 # Problem Set 1 Solution Template
 # mysoln is a list to store your answers
 
-# the first element of the list is a vector of names for the students in your group
+# -The first element of the list is a vector of names for the students in your group
+# -Make sure these match the names shown on the pdf document provided by the MFE office
 # using group 1 as an example:
 mysoln <- list(student = c("Molin Liang", "Meghana Rao", "Chengbo Du", "Shardul Kulkarni"))
 
@@ -44,6 +45,15 @@ b <- 2
 c <- 3
 mysoln[["Q4"]] <- c(a, b, c)
 
-#return my solution
-mysoln
+# 5
 
+# code
+
+# answers
+a <- c(0,0,0,0,0)
+b <- c(0,0,0,0,0)
+mysoln[["Q5"]] <- list(a = a, b = b)
+
+#return my solution
+
+mysoln
