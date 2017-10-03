@@ -44,6 +44,16 @@ b <- 2
 c <- 3
 mysoln[["Q4"]] <- c(a, b, c)
 
+# 5
+
+# code
+
+# answers
+a <- c(0,0,0,0,0)
+b <- c(0,0,0,0,0)
+mysoln[["Q5"]] <- list(a = a, b = b)
+
 #return my solution
+
 mysoln
 
