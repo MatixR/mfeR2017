@@ -1,0 +1,81 @@
+\documentclass[12pt]{article}
+\usepackage{setspace}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[hmargin=1in, vmargin = 1in]{geometry}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage{natbib}
+\title{MFE R Programming Workshop Lab 1}
+\date{October 25, 2015}
+\author{Brett R. Dunn}
+\begin{document}
+\maketitle
+
+\section{Call Options}
+A call option on a stock $S$, maturing at time $T$, struck at $K$
+is the ability, but not requirement, to purchase an asset $S$ at some
+point $T$ at the price $K$. When a trader can borrow and lend as they like
+at rate $r$ and the price of $S$ can be written at time $t$ as
+
+\[
+S_t = S_0 e^{\left(\mu-\frac{1}{2} \sigma^2 \right) t + \sigma B_t}
+\]
+
+where $B_t$ is normal with mean zero and variance $t$, and $\mu$ and
+$\sigma$ are some fixed values.
+
+Let $\Phi(z) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^z e^{-\frac{1}{2}
+  x^2}dx$ denote the CDF of the standard normal distribution. The
+famous Black-Scholes (\cite{black1973pricing},
+\cite{merton1973theory}) formula (which you will be taught how to
+derive in your derivatives class) says that a price of a call option
+on S maturing in T struck at K is
+
+\[
+S_0 \times \Phi(d_1) - e^{-rT} K \times \Phi(d_2)
+\]
+
+where
+
+\begin{eqnarray*}
+  d1 = \frac{\log(S_0 / K) + \left(r + \frac{1}{2} \sigma^2 \right)
+    T}{\sigma \sqrt{T}} \\
+  d2 = \frac{\log(S_0 / K) + \left(r - \frac{1}{2} \sigma^2 \right)
+    T}{\sigma \sqrt{T}}
+\end{eqnarray*}
+
+\section{Questions}
+
+\begin{itemize}
+\item Write an R function that takes parameters $r$, $T$, $K$,
+  $S_0$, and $\sigma$ and computes the Black-Scholes call price. You
+  will somehow need to evaluate $\Phi(x)$. There are a couple of ways
+  to do this, but all should start with considering how to find the
+  appropriate function.
+\item Evaluate the above function for the values $T=1$, $r=.04$,
+  $\sigma=.25$, $K=95$, and $S_0 = 100$.
+\item It may be that we need to do this for many parameters.  Compute
+  what the price of a call maturing in $T = 1$ year should be on a
+  stock with current price $S_0 = 100$ and volatility $\sigma = .2$,
+  when the riskless rate of interest is $r = .05$. Write code to do
+  this for every strike $K \in \{75, 76, 77, \ldots, 124, 125\}$, and
+  print the results to the screen.  Now suppose that you want to do
+  this for stocks of different maturities also, and that you need to
+  use these prices to conduct some further analysis. For the same
+  $S_0$, $r$, and $\sigma$, populate a matrix with the prices of an
+  option for strikes and maturities $(K,T) \in \{75, 76, 77, \ldots,
+  124, 125\} \times \{1/12, 2/12, \ldots 23/12, 2\}$. Again compare
+  your results with the results from the built-in R function.
+\item The file \emph{optionsdata.csv} contains the parameters for various
+options. Read in this file and compute the Black-Scholes price for
+these options. Append a column to the dataset and output the results
+to its own csv file.
+\end{itemize}
+
+\bibliographystyle{jf} \bibliography{refs}
+
+\end{document}
+
+
