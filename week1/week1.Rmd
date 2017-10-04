@@ -555,15 +555,20 @@ l <- c("A","B","B","A","A","B")
 lapply(c("A","B"), function(letter) which(l==letter))
 ```
 
-
+## Investments Problem Set 1
+- You will submit a list of answers.
+```{r}
+hw <- source("./lecture1p.R")$value
+str(hw)
+```
 
 
 # Functions
 
 ## Function Definitions
-- Note that the last value evaluated is what is returned by the function.
+- The last value evaluated is what is returned by the function.
 - You can also write `return(x^2)`.
-    - I prefer this because the code is clearer.
+    - This is useful if you want to break out of the function early.
 ```{r}
 myfunc <- function(x) x^2
 myfunc(10)
@@ -581,9 +586,38 @@ myfunc(10)
 # You can't access N out here
 ```
 
-## Investments Problem Set 1
-- You will submit a list of answers.
-```{r}
-hw <- source("./lecture1p.R")$value
-str(hw)
+# `%>%`
+
+## The Pipe Operator `%>%`
+- The `magnittr` package provides a pipe operator.
+- See `vignette("magrittr")`.
+- Basic piping:
+    - `x %>% f` is equivalent to `f(x)`
+    - `x %>% f(y)` is equivalent to `f(x, y)`
+    - `x %>% f %>% g %>% h` is equivalent to `h(g(f(x)))`
+- The argument placeholder:
+    - `x %>% f(y, .)` is equivalent to `f(y, x)`
+    - `x %>% f(y, z = .)` is equivalent to `f(y, z = x)`
+
+## Expose the variables with `%$%`
+- The `%$%` allows variable names (e.g. column names) to be used in a function.
+```{r, warning=FALSE}
+library(magrittr)
+iris %>%
+  subset(Sepal.Length > mean(Sepal.Length)) %$%
+  cor(Sepal.Length, Sepal.Width)
 ```
+
+## Compound assignment pipe operations with `%<>%`
+- There is also a pipe operator which can be used as shorthand notation in situations where the left-hand side is being “overwritten”:
+```{r, eval = FALSE, warning=FALSE}
+iris$Sepal.Length <- 
+  iris$Sepal.Length %>%
+  sqrt()
+```
+Use the %<>% operator to avoid the repetition:
+```{r, eval = FALSE, warning=FALSE}
+iris$Sepal.Length %<>% sqrt
+```
+- This operator works exactly like %>%, except the pipeline assigns the result rather than returning it.
+
