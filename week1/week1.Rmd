@@ -621,3 +621,7 @@ iris$Sepal.Length %<>% sqrt
 ```
 - This operator works exactly like %>%, except the pipeline assigns the result rather than returning it.
 
+## Lab 1
+\begin{center}
+\Large Let's work on Lab 1.
+\end{center}
