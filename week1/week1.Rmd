@@ -630,6 +630,21 @@ iris$Sepal.Length %<>% sqrt
 ```
 - This operator works exactly like %>%, except the pipeline assigns the result rather than returning it.
 
+# Lab 1
+
+## Reading in Data for Lab 1
+- `read.table` is the basic function to read in tabular data.
+- `read.csv` is a special case of `read.table`.
+    - As usual see `?read.table`.
+    - Often you want to set `stringsAsFactors = FALSE`.
+```{r}
+optdata <- read.csv(file="./lab/optionsdata.csv",
+                header = T, stringsAsFactors = FALSE)
+head(optdata, 3)
+```
+- `optdata` is a `data.frame`, a specialized type of `list`
+- `write.csv` writes data to a .csv file.
+
 ## Lab 1
 \begin{center}
 \Large Let's work on Lab 1.
