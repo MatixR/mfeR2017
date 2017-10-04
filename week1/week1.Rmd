@@ -565,14 +565,23 @@ str(hw)
 
 # Functions
 
+## Everything that happens in R is a function call
+```{r}
+`<-`(mynumber, 3)
+print(mynumber)
+`+`(3,4)
+a <- `:`(11,20)
+`[`(a,5)
+```
 ## Function Definitions
-- The last value evaluated is what is returned by the function.
-- You can also write `return(x^2)`.
-    - This is useful if you want to break out of the function early.
 ```{r}
 myfunc <- function(x) x^2
 myfunc(10)
 ```
+- The last value evaluated is what is returned by the function.
+- You can also write `return(x^2)`.
+    - This is useful if you want to break out of the function early.
+
 
 ## Scope Rules for Functions
 
