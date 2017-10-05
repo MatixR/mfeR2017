@@ -173,10 +173,10 @@ slide_level: 2
 
 ## General Comments
 - Make your code easy to read.
-- Check out [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml)
+- Check out [Hadley Wickham’s](http://adv-r.had.co.nz/Style.html) and [Google's](https://google.github.io/styleguide/Rguide.xml) R Style Guides .
 - Comment your code!
     - `#` indicates a comment in R.
-    - `Ctrl+Shift+c` comments the line.
+    - `Ctrl+Shift+c` in RStudio comments the line.
 
 \centerline{
   \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{./graphics/styleguide.png}
