@@ -59,7 +59,7 @@ slide_level: 2
 
 ## MATLAB
 
-- If you want to learn MATLAB after learning R, take a look at [R and MATLAB](http://www.math.umaine.edu/`hiebeler/comp/matlabR.html) by David Hiebeler.
+- If you want to learn MATLAB after learning R, take a look at [R and MATLAB](http://math.umaine.edu/~hiebeler/comp/matlabR.html) by David Hiebeler.
 
 \centerline{
   \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{./graphics/RandMATLAB.png}
@@ -125,7 +125,7 @@ slide_level: 2
 - My focus is going to be on R programming.
 
 ## RStudio
-
+MATLAB
 \centerline{
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{./graphics/RStudio.png}
 }
