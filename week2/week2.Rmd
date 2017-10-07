@@ -163,7 +163,7 @@ str(x_xts)
 # Load fund data
 data(edhec, package = "PerformanceAnalytics")
 edhec["2007-01/2007-02", 1]  # interval
-head(edhec["2007-01/", 1])  # start in January 2007
+head(edhec["2007-01/", 1],n = 3)  # start in January 2007
 ```
 
 ## Truncated Dates
