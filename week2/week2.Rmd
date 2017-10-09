@@ -213,7 +213,7 @@ ifelse(x<5 | x>8, x, 0)
 
 ## One Dimensional Root (Zero) Finding
 - The function `uniroot` searches an interval for a root (i.e., zero) of the function `f` with respect to its first argument.
-- Suppose we want $x$ such that $5 - e^{x} = x^2$.
+- Suppose we want $x$ such that $5 - e^{x^2} = x^2$.
 - We convert this to the root finding problem $5-e^{x^2}-x^2 = 0$.
 ```{r}
 f <- function(x) {
