@@ -225,6 +225,7 @@ f(root$root)
 ```
 
 ## General-Purpose Optimization with `optim`
+- [Rosenbrock Banana function](https://en.wikipedia.org/wiki/Rosenbrock_function)
 ```{r}
 fr <- function(x) {   ## Rosenbrock Banana function
     x1 <- x[1]
