@@ -189,6 +189,7 @@ myabs <- function(x) {
     myabs <- -x
   }
   x
+  return(myabs)
 }
 x <- -10
 myabs(x)
