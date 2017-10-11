@@ -14,8 +14,8 @@
 \maketitle
 \onehalfspacing
 \section*{Call Options}
-A European call option on a stock with price $S$, expiration date $T$, and with strike price $K$
-is the right, but not obligation, to buy the underlying asset at time $T$ at the price $K$. 
+A European call option on a stock with price $S$, expiration date $T$, and strike price $K$
+is the right, but not obligation, to buy the underlying asset at time $T$ at price $K$. 
 If the stock price dynamics follow a geometric Brownian motion, it can be shown that the stock price at time $t$, $S_t$, can be written as
 
 \[
@@ -39,9 +39,9 @@ S_0 \times N(d_1) - e^{-rT} K \times N(d_2)
 where $r$ is the risk-free rate, and
 
 \begin{align*}
-  d_1 &\equiv \frac{\log(S_0 / K) + \left(r + \frac{1}{2} \sigma^2 \right)
+  d_1 &\equiv \frac{\ln(S_0 / K) + \left(r + \frac{1}{2} \sigma^2 \right)
     T}{\sigma \sqrt{T}} \\
-  d_2 &\equiv \frac{\log(S_0 / K) + \left(r - \frac{1}{2} \sigma^2 \right)
+  d_2 &\equiv \frac{\ln(S_0 / K) + \left(r - \frac{1}{2} \sigma^2 \right)
     T}{\sigma \sqrt{T}} = d_1-\sigma\sqrt{T}
 \end{align*}
 
