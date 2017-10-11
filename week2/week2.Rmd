@@ -77,7 +77,7 @@ g(2, 1, 1)
 
 ## The Pipe Operator `%>%`
 - Pipes are a powerful tool for clearly expressing a sequence of multiple operations.
-- The `magnittr` package provides a pipe operator.
+- The `magrittr` package provides a pipe operator.
 - See `vignette("magrittr")`.
 - Basic piping:
     - `x %>% f` is equivalent to `f(x)`

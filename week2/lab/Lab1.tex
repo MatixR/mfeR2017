@@ -55,7 +55,7 @@ where $r$ is the risk-free rate, and
   appropriate function.
 \item Evaluate the above function for the values $T=1$, $r=.04$,
   $\sigma=.25$, $K=95$, and $S_0 = 100$. You can compare your answer
-  to the \texttt{Black\_Scholes} function from \texttt{qrmtools} package. 
+  to the one obtained using the \texttt{Black\_Scholes()} function from the \texttt{qrmtools} package. 
 \item We amy need to find the price of a call option for many parameters.  Compute
   what the price of a call maturing in $T = 1$ year should be on a
   stock with current price $S_0 = 100$ and volatility $\sigma = .2$,
@@ -67,7 +67,7 @@ where $r$ is the risk-free rate, and
   $S_0$, $r$, and $\sigma$, populate a matrix with the prices of an
   option for strikes and maturities $(K,T) \in \{75, 76, 77, \ldots,
   124, 125\} \times \{1/12, 2/12, \ldots 23/12, 2\}$. Again compare
-  your results with the results from the \texttt{Black\_Scholes} function.
+  your results with the results using the \texttt{Black\_Scholes()} function.
 \item The file \emph{optionsdata.csv} contains the parameters for various
 options. Read in this file and compute the Black-Scholes price for
 these options. Append a column to the dataset and output the results
