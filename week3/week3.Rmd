@@ -292,10 +292,11 @@ x.sub5
 <!-- ``` -->
 
 ## Complete.cases
-- `complete.cases()` gets rid of any rows with at least one `NA` value.
+- `complete.cases()` gets rid of any *rows* with at least one `NA` value.
 ```{r}
-x.df <- rbind(x.df,c(rnorm(3),NA))
-x.df[complete.cases(x.df), ] # removes the last row 
+# Let's makes the second col in row 1 an NA
+x.df[1,2] <- NA              
+x.df[complete.cases(x.df), ] # removes row 1
 ```
 
 ## Merging `data.frame`s
@@ -431,7 +432,7 @@ tbl <- as_tibble(df); tbl$c
 # tibble(a = integer(), b = 1)
 ```
 
-# `data.table`s
+# Very quick intro to `data.table`s
 
 ## What is a `data.table`?
 - Think of `data.table` as an advanced version of `data.frame`.
@@ -448,8 +449,9 @@ library(data.table)
 ```
 
 ## An Example
-- Syntax is DT[**i**, **j**, **by**]
-- Take DT, subset rows using **i**, then calculate **j** grouped by **by**.
+- Syntax is `DT[i, j, by]`: 
+  - "Take DT, subset rows using `i`, then calculate `j` grouped by `by`."
+
 ```{r, message = FALSE}
 data("mtcars")
 mtcarsDT <- data.table(mtcars)
