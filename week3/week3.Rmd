@@ -33,12 +33,17 @@ knitr::knit_hooks$set(chunk = function(x, options) {
     - Tibbles
     - Intro to Data Tables
 
+## Changing the Working Directory
+- Use the `setwd()` R function
+- Use the **Tools | Global Options | General**  menu 
+- From within the Files pane, use the **More | Set As Working Directory** menu. (Navigation within the Files pane alone will not change the working directory.)
+
 ## Matricies vs Data Frames
 - Matrix is a data type in R with the dimension attribute - the rows and the columns.
-    - It has the elements of same class type.
+    - It has the elements of *same* class type.
     - We can have character, integer or complex elements in the matrices and so on.
-    - We cannot have elements of mixed modes/class types such as both integer and character elements in the same matrix.
-- A data frame is a list of vectors of equal length, and the vectors can be of different types.
+    - We *cannot* have elements of mixed modes/class types such as both integer and character elements in the same matrix.
+- A `data.frame` is a list of vectors of equal length, and the vectors can be of different types.
     - e.g. one character column, one numeric column.
 - Tibbles and data tables inherit the functionality of data frames and improve on them in various ways.
 
@@ -56,7 +61,7 @@ dim(mymat)  # returns the dimension
 ## Accessing Elements of Matrices
 - Like vectors, elements can be accessed using `[]`
 ```{r}
-mymat <- matrix(1:15, nrow=3, ncol=5, byrow = FALSE)
+mymat <- matrix(1:15, nrow=3, ncol=5)
 mymat[1, 2]  # row 1, column 2
 mymat[2:3, c(1, 4, 5)]
 ```
@@ -65,7 +70,7 @@ mymat[2:3, c(1, 4, 5)]
 - Filtering can be done on a single column or a single row, otherwise the filter returns a vector.
 ```{r}
 myvec <- c(1, 1, 3, 1, 5, 1, 7, 1, 9, 1)
-mymat <- matrix(myvec, nrow=2, ncol=5, byrow = FALSE)
+mymat <- matrix(myvec, nrow=2, ncol=5)
 mymat
 mymat[, mymat[1, ] > 4]
 ```
@@ -73,7 +78,7 @@ mymat[, mymat[1, ] > 4]
 ## Vectorization
 - Most R functions work on matrices as well.
 ```{r}
-mymat <- matrix(1:10, nrow=2, ncol=5, byrow = FALSE)
+mymat <- matrix(1:10, nrow=2, ncol=5)
 exp(mymat)
 sd(mymat)  # standard deviation
 ```
@@ -83,7 +88,7 @@ sd(mymat)  # standard deviation
 - The third argument is a function!
 ```{r}
 mymat <- matrix(1:10, nrow=2)
-# mean across rows
+# mean across rows (can also use rowMeans() function)
 apply(mymat, 1, mean)  # apply mean along rows
 apply(mymat, 2, max)  # apply max along columns
 ```
@@ -116,7 +121,7 @@ mymat1 + mymat2
 ## `data.frame`s
 - The `data.frame` is one of the most useful features in R.
 - A `data.frame` is like a `matrix` with a two-dimensional rows-and-columns structure.
-- However, a `data.frame` is different because each column can have a different mode.
+- However, unlike a `matrix`, in a `data.frame` each column can have a *different* data type.
     - For example, one column might be numbers and another characters.
 - Technically, a `data.frame` is a `list`, with the components of the list being equal-length vectors.
 - Each column must be the same length (unlike a list).
@@ -126,7 +131,8 @@ mymat1 + mymat2
 ```{r}
 courses <- c("Stochastic Calculus", "Fixed Income")
 examGrades <- c(92, 98)
-gradeBook <- data.frame(courses, examGrades, stringsAsFactors = FALSE)
+gradeBook <- data.frame(courses, examGrades, 
+                        stringsAsFactors = FALSE)
 gradeBook
 ```
 
@@ -160,7 +166,7 @@ str(gradeBook[1])
 ```{r}
 gradeBook[1,2]
 gradeBook[1,] # the first row
-gradeBook[,2] # the first column
+gradeBook[,2] # the second column
 ```
 
 ## Accessing Elements of `data.frame`s like a `matrix`(2)
@@ -171,78 +177,125 @@ gradeBook[,2,drop=FALSE] # returns a data.frame
 ```
 
 # Subsetting `data.frames`
-
-## Filtering with logicals
-- Subsetting `data.frame` often subsetting the rows and/or columns, which are each vectors.
-- We can select subsets of vectors with vectors of logicals.
-```{r}
-x <- 1:5
-y <- c(TRUE,FALSE,TRUE,FALSE,TRUE)
-x[y]
-```
-
-## Filtering with logicals (2)
-- Filtering amounts to generating filtering indices (i.e. vectors of logicals).
-```{r}
-x <- c(5, 2, -3, 8)
-idx <- x*x > 8  # same as ">"(x*x, 8); 8 is recycled!
-x[idx]
-```
-
-## Assigning to a Filter
-- You can assign elements to the subsets.
-    - This allows you change elements that meet certain criteria.
-```{r}
-x <- 1:6
-x[x < 2] <- NA
-x
-```
-
 ## Filtering with `subset()`
-- The subset function filters and removes any `NA`s.
 ```{r}
-x <- c(3, 1:5, NA, 79)
-x
-x[x > 4]
-subset(x, x > 4)
-```
-## Filtering with Indices
-- Select using the row/column number.
-- Exclude entries with a negative vector.
-```{r}
-x <- 10:20
-x[c(1:2, 6:7)]
-x[-c(1,3)] # removes 1st and 3rd obs
-```
-## The Selection Function `which()`
-- `which()` gives us the position in a vector where a condition occurs.
-```{r}
-x <- c(3, 1:5, NA, 79)
-x > 4
-which(x > 4)
-```
-- See https://stackoverflow.com/questions/6918657/whats-the-use-of-which.
+set.seed(1234)
+x.df <- data.frame(V1 = rnorm(4),V2 = runif(4), 
+                   V3 = rchisq(4,df = 2), V4 = 1:4)
+x.df
 
-## `%in%`
-- `%in%` returns a logical vector indicating if there is a match or not for its left operand.
-```{r}
-1:5 %in% c(1,3)
+x.sub <- subset(x.df, V4 > 2)
+x.sub
 ```
 
-## Filtering Matrices
-- Filtering can be done on a single column or a single row, otherwise the filter returns a vector.
+## Subsetting rows using conditional statements
+- The data frame `x.sub1` contains only the observations for which the values of the variable `V4` is greater than 2 and the variable `V1` is greater than 0.6.
 ```{r}
-myvec <- c(1, 1, 3, 1, 5, 1, 7, 1, 9, 1)
-mymat <- matrix(myvec, nrow=2, ncol=5, byrow = FALSE)
-mymat
-mymat[, mymat[1, ] > 4]
+x.sub1 <- subset(x.df, V4 > 2 & V1 > 0.6)
+x.sub1
 ```
+
+## Subsetting both rows and columns
+- The data frame `x.sub2` contains only the variables `V2` and `V3` and then only the observations of these two variables where the values of variable `V4` are greater than 2 and the values of variable `V1` are greater than 0.6.
+```{r}
+x.sub2 <- subset(x.df, V4 > 2 & V1 > 0.6, 
+                 select = c(V2, V3))
+x.sub2
+```
+
+## Subsetting rows using indices
+- The `x.sub3` data frame contains only the observations for which the values of variable `V4` are equal to 2. 
+```{r}
+x.sub3 <- x.df[x.df$V4 == 2, ]
+x.sub3 
+```
+
+## Subsetting rows using `%in%`
+- The `x.sub4` data frame contains only the observations for which the values of variable `V4` are equal to either 1 or 4.
+```{r}
+x.sub4 <- x.df[x.df$V4 %in% c(1, 4), ]
+x.sub4
+```
+
+## Subsetting columns using indices
+- The `x.sub5` data frame contains all the rows on `x.df`, removing the first and third columns
+```{r}
+x.sub5 <- x.df[, -c(1,3)]
+x.sub5
+```
+
+
+<!-- ## Filtering with logicals -->
+<!-- - Subsetting `data.frame` often subsetting the rows and/or columns, which are each vectors. -->
+<!-- - We can select subsets of vectors with vectors of logicals. -->
+<!-- ```{r} -->
+<!-- x <- 1:5 -->
+<!-- y <- c(TRUE,FALSE,TRUE,FALSE,TRUE) -->
+<!-- x[y] -->
+<!-- ``` -->
+
+<!-- ## Filtering with logicals (2) -->
+<!-- - Filtering amounts to generating filtering indices (i.e. vectors of logicals). -->
+<!-- ```{r} -->
+<!-- x <- c(5, 2, -3, 8) -->
+<!-- idx <- x*x > 8  # same as ">"(x*x, 8); 8 is recycled! -->
+<!-- x[idx] -->
+<!-- ``` -->
+
+<!-- ## Assigning to a Filter -->
+<!-- - You can assign elements to the subsets. -->
+<!--     - This allows you change elements that meet certain criteria. -->
+<!-- ```{r} -->
+<!-- x <- 1:6 -->
+<!-- x[x < 2] <- NA -->
+<!-- x -->
+<!-- ``` -->
+
+<!-- ## Filtering with `subset()` -->
+<!-- - The subset function filters and removes any `NA`s. -->
+<!-- ```{r} -->
+<!-- x <- c(3, 1:5, NA, 79) -->
+<!-- x -->
+<!-- x[x > 4] -->
+<!-- subset(x, x > 4) -->
+<!-- ``` -->
+<!-- ## Filtering with Indices -->
+<!-- - Select using the row/column number. -->
+<!-- - Exclude entries with a negative vector. -->
+<!-- ```{r} -->
+<!-- x <- 10:20 -->
+<!-- x[c(1:2, 6:7)] -->
+<!-- x[-c(1,3)] # removes 1st and 3rd obs -->
+<!-- ``` -->
+<!-- ## The Selection Function `which()` -->
+<!-- - `which()` gives us the position in a vector where a condition occurs. -->
+<!-- ```{r} -->
+<!-- x <- c(3, 1:5, NA, 79) -->
+<!-- x > 4 -->
+<!-- which(x > 4) -->
+<!-- ``` -->
+<!-- - See https://stackoverflow.com/questions/6918657/whats-the-use-of-which. -->
+
+<!-- ## `%in%` -->
+<!-- - `%in%` returns a logical vector indicating if there is a match or not for its left operand. -->
+<!-- ```{r} -->
+<!-- 1:5 %in% c(1,3) -->
+<!-- ``` -->
+
+<!-- ## Filtering Matrices -->
+<!-- - Filtering can be done on a single column or a single row, otherwise the filter returns a vector. -->
+<!-- ```{r} -->
+<!-- myvec <- c(1, 1, 3, 1, 5, 1, 7, 1, 9, 1) -->
+<!-- mymat <- matrix(myvec, nrow=2, ncol=5, byrow = FALSE) -->
+<!-- mymat -->
+<!-- mymat[, mymat[1, ] > 4] -->
+<!-- ``` -->
 
 ## Complete.cases
-- `complete.cases()` is used to get rid of any observations/rows with at least one `NA` value.
+- `complete.cases()` gets rid of any rows with at least one `NA` value.
 ```{r}
-df <- data.frame(A=1:3, B=c(4,5,NA), C=7:9)
-df[complete.cases(df), ]
+x.df <- rbind(x.df,c(rnorm(3),NA))
+x.df[complete.cases(x.df), ] # removes the last row 
 ```
 
 ## Merging `data.frame`s
@@ -383,8 +436,9 @@ tbl <- as_tibble(df); tbl$c
 ## What is a `data.table`?
 - Think of `data.table` as an advanced version of `data.frame`.
     - Every column is the same length, but may have a different type
-- It inherits from data.frame and works even when `data.frame` syntax is applied on data.table.
+- It inherits from data.frame and works even when `data.frame` syntax is applied on data.table
 - `data.table` is *very fast*.
+- It is one of the most useful packages in R.
 - The syntax of `data.table` is concise.
     - Lowers programmer time...
     - ...but it can be hard to understand
@@ -399,12 +453,9 @@ library(data.table)
 ```{r, message = FALSE}
 data("mtcars")
 mtcarsDT <- data.table(mtcars)
-mtcarsDT[
-  mpg > 20,
-  .(AvgHP = mean(hp),
-    "MinWT(kg)" = min(wt*453.6)),
-  by = .(cyl, under5gears = gear < 5)]
-
+mtcarsDT[ mpg > 20, 
+          .(AvgHP = mean(hp), "MinWT(kg)" = min(wt*453.6)), 
+          by = .(cyl, under5gears = gear < 5)]
 
 ```
 
