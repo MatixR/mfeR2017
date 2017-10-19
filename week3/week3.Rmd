@@ -38,7 +38,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 - Use the **Tools | Global Options | General**  menu 
 - From within the Files pane, use the **More | Set As Working Directory** menu. (Navigation within the Files pane alone will not change the working directory.)
 
-## Matricies vs Data Frames
+## Matricies, `data.frame`s, `tibble`s, and `data.table`s
 - Matrix is a data type in R with the dimension attribute - the rows and the columns.
     - It has the elements of *same* class type.
     - We can have character, integer or complex elements in the matrices and so on.
@@ -147,9 +147,9 @@ gradeBook
 ## Accessing Elements of `data.frame`s
 - We can access a `data.frame` component just like a `list`.
 ```{r}
-gradeBook[[1]]  # fist way
-gradeBook[["courses"]]  # second way
-gradeBook$courses  # third way
+gradeBook[[1]]           # first way
+gradeBook[["courses"]]   # second way
+gradeBook$courses        # third way
 ```
 
 ## Accessing Elements of `data.frame`s (2)
