@@ -41,7 +41,7 @@ str(myvec)
 - `R` provides many functions to manipulate strings.
     - `grep()`: Searches for a substring, like the Linux command of the same name.
     - `nchar()`: Finds the length of a string.
-    - `paste()`: Assembles a string from parts.
+    - `paste()` and `paste0()`: Assembles a string from parts.  
     - `sprintf()`: Assembles a string from parts.
     - `substr()`: Extracts a substring.
     - `strsplit()`: Splits a string into substrings.
@@ -67,7 +67,8 @@ long string.
 ```{r}
 paste("North","and","South","Poles")
 paste("North","Pole",sep="")
-paste0("North","Pole") # same as sep=""
+# paste0 is same as sep="" (more efficient)
+paste0("North","Pole") == paste("North","Pole",sep="") 
 ```
 
 ## `sprintf()`
