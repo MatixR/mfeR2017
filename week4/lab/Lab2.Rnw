@@ -50,7 +50,7 @@ the yields. For example on November 3, 2014 you would get:
 
 \begin{center}
 \begin{tabular}{lr}
-Date & Yield\\
+Maturity Date & Yield\\
 \hline
 December 3, 2014 & 0.03\\
 February 3, 2015 & 0.04\\
@@ -60,7 +60,7 @@ May 3, 2015 & 0.07\\
 \end{center}
 
 \begin{itemize}
-\item Make a plot of this yield curve
+\item Plot this yield curve (i.e. yield vs. maturity at a given date)
 \item Now we are going to interpolate the missing yields (ie 2 months, 4
 months, 5 months, etc.) all the way out to 30 years. Create an empty
 xts object that has the monthly date index starting at the first
