@@ -40,6 +40,7 @@ str(myvec)
 ## Manipulating Strings
 - `R` provides many functions to manipulate strings.
     - `grep()`: Searches for a substring, like the Linux command of the same name.
+    - `gsub()`: Replaces all matches of a string with another string.
     - `nchar()`: Finds the length of a string.
     - `paste()` and `paste0()`: Assembles a string from parts.  
     - `sprintf()`: Assembles a string from parts.
@@ -48,12 +49,21 @@ str(myvec)
 - Hadley Wickham's `stringr` package provides additional functions for using regular expressions and examining text data.
 
 ## `grep()`
-- The call `grep(pattern,x)` searches for a specified substring pattern in a vector `x` of strings.
-- If `x` has `n` elements—that is, it contains `n` strings—then `grep(pattern,x)` will return a vector of length up to `n`.
--Each element of this vector will be the index in `x` at which a match of pattern as a substring of `x` was found.
+- The call `grep(pattern, x)` searches for a specified substring pattern in a vector `x` of strings.
+- If `x` has `n` elements—that is, it contains `n` strings—then `grep(pattern, x)` will return a vector of length up to `n`.
+- Each element of this vector will be the index in `x` at which a match of pattern as a substring of `x` was found.
 ```{r}
 grep("Pole",c("Equator","North Pole","South Pole"))
 ```
+
+## `gsub()`
+- The call `gsub(pattern, replacement, x)` searches for a specified substring pattern in a vector `x` of strings and replaces it with the provided replacement string.
+- If `x` has `n` elements, `gsub()` will return a string vector of length to `n`.
+- If the substring is not found, it returns the original string.
+```{r}
+gsub(" Pole","",c("Equator","North Pole","South Pole"))
+```
+
 
 ## `nchar()`
 - The call `nchar(x)` finds the length of a string `x`.
