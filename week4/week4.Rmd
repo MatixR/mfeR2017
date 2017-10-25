@@ -285,8 +285,10 @@ floor_date(jan31, "month") + months(2) - days(1)
 ## Plotting Facilities in R
 - R has excellent plotting methods built-in.
 - I will focus on base R.
-- As a next step, I recommend learning `ggplot2`, an excellent plotting package.
-- http://www.r-graph-gallery.com/
+- As a next step, I highly recommend learning `ggplot2`, an excellent plotting package.
+- Some resources:
+    - [Data visualisation with `ggplot2`](http://r4ds.had.co.nz/data-visualisation.html)
+    - [The R Graph Gallery](http://www.r-graph-gallery.com/)
 
 ## Basic Plotting
  
