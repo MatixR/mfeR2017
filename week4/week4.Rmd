@@ -44,7 +44,7 @@ str(myvec)
     - `gsub()`: Replaces all matches of a substring with another string.
     - `nchar()`: Finds the length of a string.
     - `paste()` and `paste0()`: Assembles a string from parts.  
-    - `sprintf()`: Assembles a string from parts.
+    - `sprintf()`: Returns a character vector containing a formatted combination of text and variable values..
     - `substr()`: Extracts a substring.
     - `strsplit()`: Splits a string into substrings.
 - Hadley Wickham's `stringr` package provides additional functions for using regular expressions and examining text data.
