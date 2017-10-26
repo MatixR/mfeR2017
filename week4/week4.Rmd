@@ -20,13 +20,14 @@ slide_level: 2
 ## Overview of Week 4
 - Strings
 - Dates
+- Plots (time permitting)
 - Lab
 
 # Strings
 
 ## Strings
 - A string is a sequence of characters.
-- In `R`, a sting falls in the `character` class.
+- In `R`, a string falls in the `character` class.
 ```{r}
 mystring <- "Hello"
 str(mystring)
@@ -40,7 +41,7 @@ str(myvec)
 ## Manipulating Strings
 - `R` provides many functions to manipulate strings.
     - `grep()`: Searches for a substring, like the Linux command of the same name.
-    - `gsub()`: Replaces all matches of a string with another string.
+    - `gsub()`: Replaces all matches of a substring with another string.
     - `nchar()`: Finds the length of a string.
     - `paste()` and `paste0()`: Assembles a string from parts.  
     - `sprintf()`: Assembles a string from parts.
@@ -92,18 +93,18 @@ sprintf("the square of %d is %d",i,i^2)
 ## `substr()`
 - The call `substr(x,start,stop)` returns the substring in the given character position range `start:stop` in the given string `x`.
 ```{r}
-substring("Equator",3,5)
+substr("Equator",start = 3,stop = 5)
 ```
 
 ## `strsplit()`
-- The call `strsplit(x,split)` splits a string `x` into an `R` list of substrings based on another string `split` in `x`.
+- The call `strsplit(x,split)` splits a string `x` into a list of substrings based on another string `split` in `x`.
 ```{r}
 strsplit("10-05-2017",split="-")
 ```
 
 ## Example: Creating File Names
 - Suppose we want to create five files, `q1.pdf` through `q5.pdf`, consisting of
-histograms of 100 random N(0,i2) variates. We could execute the following
+histograms of 100 $N\left(0,i^2\right)$ random variables. We could execute the following
 code:
 ```{r, eval=FALSE}
 for (i in 1:5) {
@@ -222,9 +223,9 @@ ymd_hms("2011-06-04 12:00:00", tz = "Pacific/Auckland")
 ## Extraction
 
 ```{r}
-arrive <- ymd_hms("2011-06-04 12:00:00")
+arrive <- ymd_hms("2011-06-04 12:00:25")
 second(arrive)
-second(arrive) <- 25
+second(arrive) <- 45
 arrive
 ```
  
