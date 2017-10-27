@@ -47,7 +47,7 @@ str(myvec)
     - `sprintf()`: Returns a character vector containing a formatted combination of text and variable values..
     - `substr()`: Extracts a substring.
     - `strsplit()`: Splits a string into substrings.
-- Hadley Wickham's `stringr` package provides additional functions for using regular expressions and examining text data.
+- Hadley Wickham's `stringr` package provides additional functions for using regular expressions and examining text data. See more [here](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf).
 
 ## `grep()`
 - The call `grep(pattern, x)` searches for a specified substring pattern in a vector `x` of strings.
