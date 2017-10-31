@@ -21,7 +21,9 @@ slide_level: 2
 - Strings
 - Dates
 - Plotting with Dates
-- Time-Series in R (`xts`)
+- Time-Series Data in R (`xts`)
+- Plotting in `R`
+- Lab
 
 # Strings
 
@@ -551,7 +553,7 @@ y <- c(69, 68.7, 70.7, 73.2, 74.9, 78.2,
 plot(x, y)
 ```
 
-## `xlim()` and `ylim()`
+<!-- ## `xlim()` and `ylim()` -->
 
 ## Graphical **`par`**amaters
 - Graphical parameters can be set as arguments to the `par` function, or they can be passed to the `plot` function.
