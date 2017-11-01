@@ -21,7 +21,7 @@ slide_level: 2
 - Strings
 - Dates
 - Plotting with Dates
-- Time-Series Data in R (`xts`)
+- Time-Series Data in `R` (`xts`)
 - Plotting in `R`
 - Lab
 
@@ -127,7 +127,7 @@ for (i in 1:5) {
 }
 
 
-## Date Classes in R
+## Date Classes in `R`
 - `Date` is in `yyyy-mm-dd` format and represents the number of days since Jamuary 1, 1970
 - `POSIXct` represents the (signed) number of seconds since Jamuary 1, 1970 (in the UTC time zone) as a numeric vector.
 - `POSIXlt` is a named list of vectors representing `sec`, `min`, `hour`, `mday`, `mon`, `year`, time zone par maters, and a few other items.
@@ -137,8 +137,8 @@ x; as.numeric(x)
 ```
 
 ## Creating Dates
-- Typically, dates come into R as character strings.
-- By default, R assumes the string is in the format `yyyy-mm-dd` or `yyyy-mm-dd`
+- Typically, dates come into `R` as character strings.
+- By default, `R` assumes the string is in the format `yyyy-mm-dd` or `yyyy-mm-dd`
 ```{r}
 mychar <- "2017-10-05"
 mydate <- as.Date(mychar)
@@ -195,7 +195,7 @@ as.Date(43013, origin = "1899-12-30")
 
 ## Lubridate
  
-- Lubridate is an R package that makes it easier to work with dates and times.
+- Lubridate is an `R` package that makes it easier to work with dates and times.
 - Lubridate was created by Garrett Grolemund and Hadley Wickham.
 
 ```{r}
@@ -267,19 +267,19 @@ floor_date(jan31, "month") + months(2) - days(1)
 ```
 
 
-# Time Series Data in R (`xts`)
+# Time Series Data in `R` (`xts`)
 
 ## What is a Time Series?
 - A time series is a set of observations $x_t$, each one being recorded at a specified time $t$.
 
-## Key R Time Series Packages
+## Key `R` Time Series Packages
 - `xts`: eXtensible Time Series.
 - `zoo`: Z's Ordered Observations.
     - Both were created by Achim Zeileis.
 - `lubridate`
     - Created by Garrett Grolemund and Hadley Wickham.
 
-## Date Classes in R
+## Date Classes in `R`
 - `Date` is in `yyyy-mm-dd` format.
 - `POSIXct` represents the (signed) number of seconds since the beginning of 1970 (in the UTC time zone) as a numeric vector.
 - `POSIXlt` is a named list of vectors representing `sec`, `min`, `hour`, `mday`, `mon`, `year`, time zone par maters, and a few other items.
@@ -320,19 +320,19 @@ index(x_xts)  # Gives us a vector of dates
 ```
 
 ## Viewing the **`str`**ucture of an `xts` Object.
-- The `str()` function compactly displays the internal `str`ucture of an R object.
+- The `str()` function compactly displays the internal `str`ucture of an `R` object.
 ```{r}
 str(x_xts)
 ```
 
 ## Importing and Exporting Time Series
 - Importing:
-    1. Read data into R using one of the usual functions.
+    1. Read data into `R` using one of the usual functions.
         - `read.table()`, `read.xts()`, `read.zoo()`, etc. 
-    2. `as.xts()` converts R objects to `xts`.
+    2. `as.xts()` converts `R` objects to `xts`.
 - Exporting:
     - `write.zoo(x, "file")` for text files.
-    - `saveRDS(x, "file")` for future use in R.
+    - `saveRDS(x, "file")` for future use in `R`.
 
 ## Subsetting Time Series
 - `xts` supports one and two-sided intervals.
@@ -360,7 +360,7 @@ edhec[c("1997-01-31","1997-02-28") , 1]  # a date vector
 ```
 
 ## `first()` and `last()` Functions
-- R uses `head()` and `tail()` to look at the start and end of a series.
+- `R` uses `head()` and `tail()` to look at the start and end of a series.
     - i.e. "the first 3 rows" or "the last 6 rows".
 - `xts` has two functions `first()` and `last()`.
     - i.e. "the first 6 days" or "the last 6 months" 
@@ -454,7 +454,7 @@ ep <- endpoints(edhec9701, "years")
 period.apply(edhec9701, INDEX=ep, FUN=mean)
 ```
 
-## `do.call`: A Useful R Trick
+## `do.call`: A Useful `R` Trick
 - The `do.call` function allows us to specify the name of function, either as a character or an object, and provide arguments as a list.
 ```{r}
 do.call(mean, args= list(1:10))
@@ -476,7 +476,7 @@ edhec.ytd["200209/200303", 1]
 rollapply(edhec["200301/06", 1], 3, mean)
 ```
 
-# Stock Market Data in R
+# Stock Market Data in `R`
 
 ## Data from `quantmod`
  
@@ -505,7 +505,7 @@ eom <- to.period(GSPC,'months')
 head(eom,3)
 ```
 
-# Plotting in R
+# Plotting in `R`
 
 ## Motivation
 \begin{center}
@@ -524,9 +524,9 @@ head(eom,3)
     - Grid lines.
     - Labels.
 
-## Plotting Facilities in R
+## Plotting Facilities in `R`
 - R has excellent plotting methods built-in.
-- I will focus on base R.
+- I will focus on base `R`.
 - As a next step, I recommend learning `ggplot2`, an excellent plotting package.
 - http://www.r-graph-gallery.com/
 
@@ -576,7 +576,7 @@ plot(x, y)
 plot(x,y, pch = 16, col='darkblue')
 ```
 
-## Colors in R
+## Colors in `R`
 - `colors()` returns all available color names.
 - `rainbow(n)`, `heat.colors(n)`, `terrain.colors(n)` and `cm.colors(n)` return a vector of `n` contiguous colors.
 ```{r, fig.height = 5}
@@ -661,7 +661,7 @@ curve(cos(x), -2*pi, 2*pi)
 - You can use `dev.copy()` to save the displayed graph.
 - See `library(help = "grDevices")` for more information.
 
-## An Example of Plotting in R
+## An Example of Plotting in `R`
 - Let's plot the cumulative (gross) return of IBM and the S\&P 500 since 1980.
 ```{r,message=FALSE}
 library(quantmod)
@@ -724,9 +724,9 @@ legend("topleft", inset=.02,
   \includegraphics[width=\textwidth,height=.8\textheight,keepaspectratio]{./googletrends.png}
 }
 
-## Loading the Data into R
+## Loading the Data into `R`
 
-- First, we load the data into R:
+- First, we load the data into `R`:
 ```{r,size='scriptsize'}
 dataScience = read.csv(file = "./multiTimeline.csv",
           header = T, skip = 2, stringsAsFactors = F)
