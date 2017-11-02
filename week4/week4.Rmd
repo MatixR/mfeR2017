@@ -339,7 +339,7 @@ str(x_xts)
 # Load fund data
 data(edhec, package = "PerformanceAnalytics")
 edhec["2007-01/2007-02", 1]  # interval
-head(edhec["2007-01/", 1])  # start in January 2007
+head(edhec["2007-01/", 1], n = 5)  # start in January 2007
 ```
 
 ## Truncated Dates
@@ -372,6 +372,7 @@ first(edhec[, "Convertible Arbitrage" ], "3 months")
 ```{r}
 x <- edhec["199701/02", 1]
 y <- edhec["199702/03", 1]
+z <- edhec["199703/04", 1]
 x + y # only the intersection
 ```
 
@@ -394,10 +395,10 @@ x + merge(y, index(x), fill = na.locf)
 - `merge` takes three arguments.
     - an arbitrary number of time series.
     - `fill`, which handles missing data.
-    - `join`, the type of join we want to do.
+    - `join`, the type of join we want to do. The default is *outer* join.
 ```{r}
-colnames(x) <- "x"; colnames(y) <- "y"
-merge(x, y)
+colnames(x) <- "x"; colnames(y) <- "y"; colnames(z) <- "z"
+merge(x, y, z)
 ```
 
 ## Merging `xts` Objects: Left and Right Joins
@@ -407,7 +408,7 @@ merge(x, y, join='right')
 ```
 
 ## Missing Data
-- locf: last observation carried forward
+- `locf`: last observation carried forward
 ```{r}
 x <- c(1, NA, NA, 4)
 idx <- seq(as.Date("2016-10-27"), length=4, by="days")
@@ -419,9 +420,15 @@ cbind(x, na.locf(x), na.locf(x, fromLast = TRUE))
 na.fill(x, -999)
 na.omit(x)
 ```
+
 ## Interpolate NAs
+- Missing values (`NA`s) are replaced by *linear* interpolation via `approx` or *cubic spline* interpolation
+via `spline`, respectively.
+
+
 ```{r}
 na.approx(x)
+# na.spline(x) gives the same results in this example
 ```
 
 ## Lagging a Time Series
@@ -564,6 +571,7 @@ plot(x, y)
         - 0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash
     - `lwd`: line width.
     - `mar`: margins.
+    - `bg`: background color
 
 ## `pch`
 - `pch` sets how points are displayed
@@ -617,7 +625,8 @@ x2 <- 1:10; y2 <- 1 + 2*x2 + rnorm(10)
 plot(x2,y2, pch = 16, col='darkblue')
 model <- lm(y2 ~ x2)
 abline(model, col="darkgrey", lwd=2)
-abline(v = 5, col = "red", lty = 2)
+abline(v = 5 , col = "red", lty = 2)
+abline(h = 12, col = "red", lty = 2)
 ```
 
 ## Adding a Title in Lables
@@ -653,10 +662,10 @@ curve(cos(x), -2*pi, 2*pi)
 
 
 ## Saving a Plot to a File
-1. Open a file: `pdf("name.pdf")`
-2. Create the plot.
-3. Close the device with `dev.off()`
-
+- Saving a plot to a pdf file:
+    - Open a file: `pdf("FileName.pdf", width, height,...)`
+    - Create the plot.
+    - Close the device with `dev.off()`
 - You can use `dev.copy()` to save the displayed graph.
 - See `library(help = "grDevices")` for more information.
 
@@ -664,7 +673,8 @@ curve(cos(x), -2*pi, 2*pi)
 - Let's plot the cumulative (gross) return of IBM and the S\&P 500 since 1980.
 ```{r,message=FALSE}
 library(quantmod)
-getSymbols(c("^GSPC", "IBM"), src="yahoo", from = "1979-12-31")
+getSymbols(c("^GSPC", "IBM"), src="yahoo", 
+           from = "1979-12-31")
 adj_close <- merge(GSPC$GSPC.Adjusted, IBM$IBM.Adjusted)
 daily_returns <- diff(adj_close)/lag(adj_close)
 cum_ret <- cumprod(1+daily_returns[-1,])
