@@ -277,17 +277,16 @@ floor_date(jan31, "month") + months(2) - days(1)
 - `zoo`: Z's Ordered Observations.
     - Both were created by Achim Zeileis.
 - `lubridate`
-    - Created by Garrett Grolemund and Hadley Wickham.
 
-## Date Classes in `R`
-- `Date` is in `yyyy-mm-dd` format.
-- `POSIXct` represents the (signed) number of seconds since the beginning of 1970 (in the UTC time zone) as a numeric vector.
-- `POSIXlt` is a named list of vectors representing `sec`, `min`, `hour`, `mday`, `mon`, `year`, time zone par maters, and a few other items.
-```{r}
-x <- Sys.time()  # clock time as a POSIXct object
-x
-class(x)
-```
+<!-- ## Date Classes in `R` -->
+<!-- - `Date` is in `yyyy-mm-dd` format. -->
+<!-- - `POSIXct` represents the (signed) number of seconds since the beginning of 1970 (in the UTC time zone) as a numeric vector. -->
+<!-- - `POSIXlt` is a named list of vectors representing `sec`, `min`, `hour`, `mday`, `mon`, `year`, time zone par maters, and a few other items. -->
+<!-- ```{r} -->
+<!-- x <- Sys.time()  # clock time as a POSIXct object -->
+<!-- x -->
+<!-- class(x) -->
+<!-- ``` -->
 
 ## What is `xts`?
 - `xts` is an extended `zoo` object.
