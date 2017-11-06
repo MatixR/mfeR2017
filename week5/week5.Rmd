@@ -49,7 +49,8 @@ download.file(url, destinationfile, method='curl')
 untar()  # untar a file
 tar()  # tar a file
 # display file information
-f<-(dir("/path/to/something", full.names = TRUE) %>% file.info)
+f <- (dir("/path/to/something", 
+        full.names = TRUE) %>% file.info)
 # delete a file (be careful!!)
 unlink("/path/to/something")
 
