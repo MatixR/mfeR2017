@@ -444,6 +444,29 @@ DT[,mpg_forward1:=shift(mpg, n = 1, type='lead')]
 head(DT)
 ```
 
+## Reshaping `data.table`s
+- The `melt` and `dcast` functions for `data.table`s are extensions of the corresponding functions from the [`reshape2`](https://cran.r-project.org/web/packages/reshape2/index.html) package.
+
+```{r}
+DT <- readRDS("melt_example.RDS")
+DT
+```
+
+## `melt`ing `data.table`s (wide to long)
+```{r}
+DT.m1 <- melt(DT, 
+              id.vars = c("fam_id", "age_mom"),
+              measure.vars = c("dob_child1", "dob_child2", "dob_child3"))
+DT.m1
+```
+
+## Casting `data.table`s (long to wide)
+```{r}
+dcast(DT.m1, fam_id + age_mom ~ variable, 
+      value.var = "value")
+```
+
+
 ## `fread` and `fwrite`
 - `fread` is similar to `read.csv()` and but a lot faster. It reads a csv file into a `data.table`.
 - `fwrite` is to write a data.table into a csv file similar to `write.csv()`.
