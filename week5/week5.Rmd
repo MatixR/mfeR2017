@@ -206,32 +206,33 @@ colnames(msp500) <- "vwretd"
     - Lowers programmer time...
     - ...but it can be hard to understand
     - Make sure you comment your code!
+- Highly recommend going through [`data.table` Cheat Sheet](https://s3.amazonaws.com/assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf).
 ```{r, message = FALSE}
 library(data.table)
 ```
 
-## An Example
-- Syntax is DT[**i**, **j**, **by**]
-- Take DT, subset rows using **i**, then calculate **j** grouped by **by**.
-```{r, message = FALSE}
-data("mtcars")
-mtcarsDT <- data.table(mtcars)
-mtcarsDT[
-  mpg > 20,
-  .(AvgHP = mean(hp),
-    "MinWT(kg)" = min(wt*453.6)),
-  by = .(cyl, under5gears = gear < 5)]
+<!-- ## An Example -->
+<!-- - Syntax is DT[**i**, **j**, **by**] -->
+<!-- - Take DT, subset rows using **i**, then calculate **j** grouped by **by**. -->
+<!-- ```{r, message = FALSE} -->
+<!-- data("mtcars") -->
+<!-- mtcarsDT <- data.table(mtcars) -->
+<!-- mtcarsDT[ -->
+<!--   mpg > 20, -->
+<!--   .(AvgHP = mean(hp), -->
+<!--     "MinWT(kg)" = min(wt*453.6)), -->
+<!--   by = .(cyl, under5gears = gear < 5)] -->
 
 
-```
-## Types in R
-- Character columns are very efficient in R.
-```{r}
-typeof(1)
-typeof(1L)
-typeof(NA)
-typeof(NA_integer_)
-```
+<!-- ``` -->
+<!-- ## Types in R -->
+<!-- - Character columns are very efficient in R. -->
+<!-- ```{r} -->
+<!-- typeof(1) -->
+<!-- typeof(1L) -->
+<!-- typeof(NA) -->
+<!-- typeof(NA_integer_) -->
+<!-- ``` -->
 
 ## Creating a `data.table`
 ```{r, warning=FALSE}
@@ -239,7 +240,6 @@ DT <- data.table(A=1:6, B=c("a", "b", "c"),
                  C=runif(6), D=FALSE)
 DT
 ```
-
 
 ## Selecting Rows by Number in **i**
 - The comma is optional.
@@ -305,13 +305,19 @@ DT[.N] # the last row, the same as DT[nrow(DT)]
 DT[, .(Total = sum(C), Count = .N), by = .(Group = A%%2)]
 ```
 
-## Operations can be Chained Together
-```{r, fig.height=3}
-DT[, {plot(A, C)
-      DT}][, .(Total = sum(C), # DT returns DT
-               Count = .N),
-               by = .(Group = A%%2)]
-```
+<!-- ## Operations can be Chained Together -->
+<!-- ```{r} -->
+<!-- DT[,`:=`(E=A^2, F = C - 1)][,G:=sqrt(abs(F))] -->
+<!-- ``` -->
+
+
+<!-- ## Operations can be Chained Together -->
+<!-- ```{r, fig.height=3} -->
+<!-- DT[, {plot(A, C) -->
+<!--       DT}][, .(Total = sum(C), # DT returns DT -->
+<!--                Count = .N), -->
+<!--                by = .(Group = A%%2)] -->
+<!-- ``` -->
 
 ## **`S`**ubset of **`D`**ata - `.SD`
 - `.SD` is a data.table.
@@ -319,8 +325,9 @@ DT[, {plot(A, C)
 - This is very useful if you have a very wide data.table.
 - `.SDcols` allows you to apply a function to a subset of the columns.
 ```{r}
-DT <- as.data.table(iris)
-DT[, lapply(.SD, median), by = Species]
+DT <- as.data.table(mtcars)
+DT[, lapply(.SD, median), by = cyl, 
+   .SDcols = c("mpg","gear","wt")]
 ```
 - Since `lapply` returns a list, we don't need to wrap it in `.()`.
 
@@ -330,6 +337,14 @@ DT <- data.table(A=1:3, B=4:6)
 DT
 DT[, c("A", "C") := .(rev(A), 7:9)]
 ```
+
+## Create Multiple Columns with `:=` in One Statement
+```{r, tidy=TRUE, size="footnotesize"}
+DT <- data.table(mtcars)[,.(mpg, cyl)]
+DT[,`:=`(avg=mean(mpg), med=median(mpg)), by=cyl]
+head(DT)
+```
+
 
 ## Remove Columns Using `:=`
 - We use `NULL` to remove columns.
@@ -345,6 +360,7 @@ DT[, c("B", "C") := NULL]
 DT <- data.table(A=1:6, B=c("a", "b", "c"), C=runif(6))
 DT[1:5, D := sum(C), by=B]
 ```
+
 ## Use `set()` in Loops.
 - `set()` is a loopable, low-overhead version, of the `:=` operator, but it cannot handle grouping.
 - Syntax: `set(DT, i, j, value)`.
@@ -419,6 +435,18 @@ setkey(DT, A, B)
 DT[.("b")]
 DT[.("b", 5)]
 ```
+
+## Using shift for to lead/lag vectors and lists
+```{r}
+DT <- data.table(mtcars)[,.(mpg)]
+DT[,mpg_lag1:=shift(mpg, n = 1)]
+DT[,mpg_forward1:=shift(mpg, n = 1, type='lead')]
+head(DT)
+```
+
+## `fread` and `fwrite`
+- `fread` is similar to `read.csv()` and but a lot faster. It reads a csv file into a `data.table`.
+- `fwrite` is to write a data.table into a csv file similar to `write.csv()`.
 
 ## Converting `xts` objects to `data.table`s
 ```{r, message=FALSE}
