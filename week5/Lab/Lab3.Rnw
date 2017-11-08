@@ -84,7 +84,7 @@ R^{e}_{it} = \alpha_{i} + \beta_{i} mkt.RF_{t} + h_{i} HML_{t} + s_{i} SMB_{t} +
 \end{equation*}
 
 Calculate the average returns for the 3 Fama-French factors
-$E[mkt.RF_{t}]$, $E[HML_{t}]$, and $E[SMB_{t}]$. Now for each
+$\mathbb{E}[mkt.RF_{t}]$, $\mathbb{E}[HML_{t}]$, and $\mathbb{E}[SMB_{t}]$. Now for each
 portfolio, calculate the predicted value:
 
 \begin{equation*}
