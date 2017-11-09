@@ -144,7 +144,7 @@ last(gdp, 4)
 - Take note of the path to the files; we need the path to establish the connection to WRDS.
 
 ## Establish the Connection
-```{r ecval=FALSE, include=FALSE}
+```{r eval=FALSE, include=FALSE}
 library(rJava)
 .jinit(parameters="-Xmx8g")
 library(RJDBC)
@@ -579,5 +579,7 @@ DT[.(dt), roll=TRUE] # roll forward; try roll=-Inf.
 
 ## Lab 3
 \begin{center}
-\Large Let's work on Lab 3.
+\Large Let's work on \href{https://github.com/brettdunn/mfeR2017/blob/master/week5/Lab/Lab3.pdf}{Lab 3}.
 \end{center}
+
+
