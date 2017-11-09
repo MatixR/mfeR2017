@@ -18,7 +18,7 @@ slide_level: 2
 \end{center}
 
 ## Overview
-<!-- - Importing Data from Databases -->
+- Importing Data from Databases
 - Importing Data from the Web
 - Importing Data from WRDS
 - `data.table`
@@ -55,47 +55,47 @@ slide_level: 2
 
 <!-- ``` -->
 
-<!-- # Importing Data from Databases -->
+# Importing Data from Databases
 
-<!-- ## Databases -->
-<!-- - A database stores data in table format. -->
-<!-- - There a several popular database management systems (DMS): -->
-<!--     - MySQL, PostgreSQL, SQLite, Oracle, Microsoft SQL Server, etc. -->
-<!-- - Structured Query Language (SQL) is used maintain and query the database. -->
+## Databases
+- A database stores data in table format.
+- There a several popular database management systems (DMS):
+    - MySQL, PostgreSQL, SQLite, Oracle, Microsoft SQL Server, etc.
+- Structured Query Language (SQL) is used maintain and query the database.
 
-<!-- ## Databases in R -->
-<!-- - There are different R packages for each DMS: -->
-<!--     - MySQL = RMySQL -->
-<!--     - PostgreSQL = RPostgreSQL -->
-<!--     - SQLite = RSQLite -->
-<!--     - Oracle = ROracle -->
-<!--     - SQL Server = RSQLServer -->
-<!-- - The functions we use to interact with the database are specified in the R package DBI. -->
+## Databases in R
+- There are different R packages for each DMS:
+    - MySQL = RMySQL
+    - PostgreSQL = RPostgreSQL
+    - SQLite = RSQLite
+    - Oracle = ROracle
+    - SQL Server = RSQLServer
+- The functions we use to interact with the database are specified in the R package `DBI`.
 
-<!-- ## A MySQL Example: Establish a Connection -->
-<!-- - First, we need to establish a connection to the database. -->
-<!-- ```{r, eval=FALSE} -->
-<!-- library(DBI) -->
-<!-- con <- dbConnect(RMySQL::MySQL(), # the MySQL driver -->
-<!--                  dbname = "dbname", # database name -->
-<!--                  host = "IP_or_WebAddress",  -->
-<!--                  port = 3306, # port is 3306 by default -->
-<!--                  user = "username", -->
-<!--                  password = "password") -->
-<!-- ``` -->
+## A MySQL Example: Establish a Connection
+- First, we need to establish a connection to the database.
+```{r, eval=FALSE}
+library(DBI)
+con <- dbConnect(RMySQL::MySQL(), # the MySQL driver
+                 dbname = "dbname", # database name
+                 host = "IP_or_WebAddress",
+                 port = 3306, # port is 3306 by default
+                 user = "username",
+                 password = "password")
+```
 
-<!-- ## List and Import Tables -->
-<!-- ```{r, eval=FALSE} -->
-<!-- # lists the tables in the database -->
-<!-- dbListTables(con)  -->
-<!-- # returns a dataframe -->
-<!-- dbReadTable(con, "tablename") -->
-<!-- # import all the tables -->
-<!-- table_names <- dbListTables(con) -->
-<!-- tables <- lapply(table_names, dbReadTable, conn = con) -->
-<!-- # close the connection when you are done -->
-<!-- dbDisconnect(con)  -->
-<!-- ``` -->
+## List and Import Tables
+```{r, eval=FALSE}
+# lists the tables in the database
+dbListTables(con)
+# returns a dataframe
+dbReadTable(con, "tablename")
+# import all the tables
+table_names <- dbListTables(con)
+tables <- lapply(table_names, dbReadTable, conn = con)
+# close the connection when you are done
+dbDisconnect(con)
+```
 
 # Importing Data From the Web
 
