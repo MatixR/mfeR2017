@@ -568,14 +568,45 @@ setkey(DT,index)
 DT
 ```
 
+<!-- ## Rolling Joins -->
+<!-- - Rolling joins are useful for time-series data. -->
+<!-- - See `roll` and `rollends` in `?data.table`. -->
+<!-- ```{r, message=FALSE} -->
+<!-- DT -->
+<!-- dt <- as.Date("2016-11-15"); DT[.(dt)] -->
+<!-- DT[.(dt), roll=TRUE] # roll forward; try roll=-Inf.  -->
+<!-- ``` -->
+
 ## Rolling Joins
-- Rolling joins are useful for time-series data.
-- See `rollends` in `?data.table`.
-```{r, message=FALSE}
-DT
-dt <- as.Date("2016-11-15"); DT[.(dt)]
-DT[.(dt), roll=TRUE] # roll forward; try roll=-Inf. 
+- Suppose you have a table of product sales and a table of commercials. 
+- You might want to associate each product sale with the most recent commercial that aired prior to the sale. 
+<!-- - You cannot do a basic `join` between the sales and the commercials `data.table`s because each sale was NOT tracked with a `commID` attribute -->
+```{r}
+sales <- data.table(saleID=c("S1","S2","S3","S4","S5"), 
+          saleDate=as.Date(c("2014-2-20","2014-5-1",
+                "2014-6-15","2014-7-1","2014-12-31")))
+sales
 ```
+
+## Rolling Joins
+```{r}
+commercials <- data.table(commID=c("C1","C2","C3","C4"), 
+               commDate=as.Date(c("2014-1-1","2014-4-1",
+                                 "2014-7-1","2014-9-15")))
+commercials
+setkey(sales,saleDate)
+setkey(commercials,commDate)
+
+```
+## Rolling Joins
+```{r}
+sales[commercials, roll=TRUE]
+```
+
+- `data.table` is associating each commercial with the most recent sale prior to the commercial date (and including the commercial date). 
+- The most recent sale prior to each commercial is said to roll forwards, and the saleDate is mapped to the `commDate`. 
+- Notice that sale `S4` was the most recent sale prior to commercials `C3` and `C4`, so `S4` appears twice in the resultant table.
+- Can do *backward* rolling joins by setting the `roll = -Inf`.
 
 ## Lab 3
 \begin{center}
