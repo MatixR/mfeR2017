@@ -121,30 +121,52 @@ LAX$delay
 ## Quandl
 - Quandl is a useful source of financial data and there is an R package `Quandl` to import the data into R.
 - See https://www.quandl.com/tools/r.
-- Data can be downloaded as xts objects, datatables, etc.
-```{r, message=FALSE, eval = FALSE}
+- Data can be downloaded as `xts` objects, datatables, etc.
+```{r, message=FALSE}
 library(Quandl)
-# download GDP as an xts object
+# download GDP % growth as an xts object
 gdp <- Quandl("FRED/GDP", type="xts")
-last(gdp, 2)
+last(gdp, 4)
 ```
 
 # Importing Data from WRDS
 
 ## WRDS, CRSP, and R
-- Wharton Research Data Services has over 250 terabytes of data.
+- Wharton Research Data Services (wrds) has over 250 terabytes of data.
 - One data provider is The Center for Research in Security Prices (CRSP).
     - You will use CRSP data throughout the MFE program.
 - I will show you how to access WRDS from R.
 - Documentation: [Using R with WRDS](https://wrds-web.wharton.upenn.edu/wrds/support/Accessing%20and%20Manipulating%20the%20Data/_007R%20Programming/_001Using%20R%20with%20WRDS.cfm)
 
 ## Setup
-- First, we need to obtain access to WRDS and download the SAS drivers for JDBC from [here](https://wrds-web.wharton.upenn.edu/wrds/support/SAS-JDBC-Drivers.zip.cfm).
+- First, you need to encode your wrds password: instructions [here](https://wrds-web.wharton.upenn.edu/wrds/support/Accessing%20and%20Manipulating%20the%20Data/_010Encoding%20your%20WRDS%20Password.cfm).
+- We also need to obtain access to WRDS and download the SAS drivers for JDBC from [here](https://wrds-web.wharton.upenn.edu/wrds/support/SAS-JDBC-Drivers.zip.cfm).
 - The two files should be saved locally.
 - Take note of the path to the files; we need the path to establish the connection to WRDS.
 
 ## Establish the Connection
-```{r, eval = FALSE}
+```{r ecval=FALSE, include=FALSE}
+library(rJava)
+.jinit(parameters="-Xmx8g")
+library(RJDBC)
+
+user <- "my_username"
+pass <- '{SAS002}DBCC5712369DE1C65B19864C1564FB850F398DCF'
+wrdsconnect <- function(user=user, pass=pass){
+drv <- JDBC("com.sas.net.sharenet.ShareNetDriver", "~/Dropbox/wrds_driver/sas.intrnet.javatools.jar",
+    identifier.quote="`")
+wrds <- dbConnect(drv, "jdbc:sharenet://wrds-cloud-h.wharton.private:8551/", user, pass)
+return(wrds)
+}
+.First <- function(){
+    wrds <<- wrdsconnect(user=user, pass=pass)
+}
+.Last <- function(){
+    dbDisconnect(wrds)
+}
+```
+
+```{r eval=FALSE}
 # ---- INPUTS ---- #
 username <- "myUserName"
 password <- "myPassword"
@@ -211,20 +233,19 @@ colnames(msp500) <- "vwretd"
 library(data.table)
 ```
 
-<!-- ## An Example -->
-<!-- - Syntax is DT[**i**, **j**, **by**] -->
-<!-- - Take DT, subset rows using **i**, then calculate **j** grouped by **by**. -->
-<!-- ```{r, message = FALSE} -->
-<!-- data("mtcars") -->
-<!-- mtcarsDT <- data.table(mtcars) -->
-<!-- mtcarsDT[ -->
-<!--   mpg > 20, -->
-<!--   .(AvgHP = mean(hp), -->
-<!--     "MinWT(kg)" = min(wt*453.6)), -->
-<!--   by = .(cyl, under5gears = gear < 5)] -->
+## An Example
+- Syntax is `DT[i, j, by]`
+- Take DT, subset rows using **i**, then calculate **j** grouped by **by**.
+```{r, message = FALSE}
+data("mtcars")
+mtcarsDT <- data.table(mtcars)
+mtcarsDT[
+  mpg > 20,
+  .(AvgHP = mean(hp),
+    "MinWT(kg)" = min(wt*453.6)),
+  by = .(cyl, under5gears = gear < 5)]
+```
 
-
-<!-- ``` -->
 <!-- ## Types in R -->
 <!-- - Character columns are very efficient in R. -->
 <!-- ```{r} -->
@@ -236,6 +257,7 @@ library(data.table)
 
 ## Creating a `data.table`
 ```{r, warning=FALSE}
+set.seed(1234)
 DT <- data.table(A=1:6, B=c("a", "b", "c"),
                  C=runif(6), D=FALSE)
 DT
@@ -248,6 +270,13 @@ DT[2:4, ]
 DT[2:4]
 ```
 
+## Selecting Rows: other methods
+- The comma is optional.
+```{r, warning=FALSE}
+DT[ A %in% 2:3,]
+DT[ B == "a", ]
+```
+
 ## Selecting Columns in **j**
 - Columns are specified as a list with the actual names, not as character vectors.
 - `.()` is an alias to `list()` in data.tables.
@@ -257,16 +286,16 @@ DT[2:3, .(A, C)]
 ```
 
 ## Selecting Columns in **j** with character vectors
-- To select columns with a character vector, set the `with` argument to `FALSE`.
+- To select columns with a character vector, use the `with = FALSE`. 
 ```{r, warning=FALSE}
-DT[2:3, c("A", "C"), with=FALSE]
+DT[2:3, c("A", "C"), with = FALSE]
 ```
 
 ## Computing on Columns
 - If the lengths of the results are not equal, the shorter one will be recycled.
 ```{r}
-DT[, .(Total = sum(A), Mean = mean(C))]
-DT[2:4, .(B, Mean = mean(C))]
+DT[A %in% 2:4, .(Total = sum(A), Mean = mean(C))]
+DT[A %in% 2:4, .(B, Mean = mean(C))]
 ```
 
 ## You can put almost anything into **j**
@@ -292,7 +321,7 @@ DT[, A]  # a vector
 ```{r}
 DT[, .(Total = sum(A),
      Mean = mean(C)),
-     by = .(B)] # returned in the order they appear
+     by = "B"] # returned in the order they appear
 # functions work as well
 DT[, .(Total = sum(C)), by = .(Group = A%%2)]
 ```
@@ -333,16 +362,17 @@ DT[, lapply(.SD, median), by = cyl,
 
 ## Add or Update Columns by Reference Using `:=`
 ```{r}
-DT <- data.table(A=1:3, B=4:6)
+(DT <- data.table(A=1:3, B=4:6))
+DT[,C := A + B]
 DT
-DT[, c("A", "C") := .(rev(A), 7:9)]
 ```
 
 ## Create Multiple Columns with `:=` in One Statement
 ```{r, tidy=TRUE, size="footnotesize"}
-DT <- data.table(mtcars)[,.(mpg, cyl)]
-DT[,`:=`(avg=mean(mpg), med=median(mpg)), by=cyl]
-head(DT)
+DT_cars <- data.table(mtcars)[,.(mpg, cyl)]
+DT_cars[,`:=`(avg=mean(mpg), med=median(mpg)), 
+   by=cyl]
+head(DT_cars)
 ```
 
 
@@ -351,23 +381,28 @@ head(DT)
 
 ```{r}
 DT[, D := 10:12]
-DT[, c("B", "C") := NULL]
+DT
+DT[,`:=`(B = NULL, C = NULL)]
+# DT[, c("B", "C") := NULL] # also works
+DT
 ```
 - Wrap the LHS in `()` if you pass a variable.
 
 ## Combining `:=` with **i** and **by**
 ```{r}
 DT <- data.table(A=1:6, B=c("a", "b", "c"), C=runif(6))
-DT[1:5, D := sum(C), by=B]
+DT[, D := sum(C), by = B]
+DT
 ```
 
 ## Use `set()` in Loops.
 - `set()` is a loopable, low-overhead version, of the `:=` operator, but it cannot handle grouping.
 - Syntax: `set(DT, i, j, value)`.
-- Instead of `for (i in 1:6) DT[i, z := i+1]` we can 
+- Instead of `for (i in 1:6) DT[i, C := i+1]` we can 
 ```{r}
-DT <- data.table(A=7:12, B=7:12)
-for (i in 1:6) set(DT, i, 2L, i+1)
+DT <- data.table(A = 7:12, B = 10:15)
+for (i in 1:6) set(DT, i, "B", i+1)
+# for (i in 1:6) set(DT, i, 2L, i+1) # would work too
 DT
 ```
 
@@ -384,24 +419,26 @@ setcolorder(DT,c("Y", "X"))
 DT
 ```
 
-## Using Column Names in **i**
-```{r}
-DT <- data.table(A=1:6, B=c("a", "b", "c"),
-                 C=runif(6), D=FALSE)
-DT[B %in% c("a","b")]
-```
+<!-- ## Using Column Names in **i** -->
+<!-- ```{r} -->
+<!-- DT <- data.table(A=1:6, B=c("a", "b", "c"), -->
+<!--                  C=runif(6), D=FALSE) -->
+<!-- DT[B %in% c("a","b")] -->
+<!-- ``` -->
 
 ## Regular Expressions
 - Metacharacters allow you to match certain types of characters.
-    - For example, . means any single character, ^ means "begins with", and $ means "ends with".
+    - For example, "`.`" means any single character, "`^`" means "begins with", and "`$`" means "ends with".
 - If you want to use any of the metacharacters as actual text, you need to use the \\ escape sequence.
 - See `?gsub()` and `?grep()`.
 ```{r}
-iris <- as.data.table(iris)
+iris_dt <- as.data.table(iris)
 # Change column names
-setnames(iris, names(iris), gsub("^Sepal\\.", "", names(iris)))
+setnames(iris_dt, names(iris_dt), 
+         gsub("^Sepal\\.", "", names(iris_dt)))
 # Remove columns
-iris[, grep("^Petal", names(iris)) := NULL]
+iris_dt[, grep("^Petal", names(iris_dt)) := NULL]
+head(iris_dt, n = 2)
 ```
 
 ## Keys
