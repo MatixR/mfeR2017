@@ -75,7 +75,7 @@ iris$Sepal.Length %<>% sqrt
 - The two most important properties of tidy data are:
     - Each column is a variable.
     - Each row is an observation.
-- Check [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) book.
+- Check [R for Data Science](http://r4ds.had.co.nz/) book.
 
 ## Sample data
 - A common problem is a dataset where some of the column names are not names of variables, but values of a variable. 
@@ -180,22 +180,18 @@ df %>% spread(x, y) %>% gather(x, y, a:b, na.rm = TRUE)
 
 ## Data: nycflights13
 
-- To explore the basic data manipulation verbs of dplyr, we'll start
-with the built in `nycflights13} data frame
-- This dataset contains all flights that departed from New York City
-in 2013
-```{r, include=TRUE, echo=TRUE, results='hide', message=FALSE}
+- To explore the basic data manipulation verbs of `dplyr`, we'll start
+with the built in `nycflights13` data frame
+- This dataset contains all flights that departed from New York City in 2013.
+```{r, include=TRUE, echo=TRUE,  message=FALSE}
 library(dplyr)
 library(nycflights13)
-```
-```{r}
 head(flights,4)
 ```
-- dplyr can work with data frames as is, but if you're dealing with
-large data, it's worthwhile to convert them to a `tbl_df`
-
 
 ## `tbl`s (Tibbles)
+- `dplyr` can work with data frames as is, but if you're dealing with
+large data, it's worthwhile to convert them to a `tbl_df`.
 - A `tbl` will only display the data that will fit in your console.
 -`glimpse()` is another nice way to look at the data 
 ```{r}
@@ -219,8 +215,8 @@ flights
 - `sample_n()` and `sample_frac()`
 
 ## Tidy Data
-- `dplyr` works best when variables are in columns and observations are in rows.
--  You can use `tidyr` to help you create a tidy dataset. 
+- `dplyr` works best with *tidy* data. i.e. when variables are in columns and observations are in rows.
+-  As shown above, you can use `tidyr` to help you create a tidy dataset. 
 
 
 ## Select Columns by Name with `select()`
@@ -254,13 +250,14 @@ select(flights, -(year:day))
 
 ## Add New Columns with `mutate()`
 ```{r, include=TRUE, echo=TRUE, size="scriptsize"}
-mutate(flights,
+flights %>% mutate(
        gain = arr_delay - dep_delay,
-       speed = distance / air_time * 60)
+       speed = distance / air_time * 60) %>% 
+  select(year,month,gain,speed)
 ```
 
 
-## If you only want to keep the new variables, use `transmute()`
+## If you *only* want to keep the new variables, use `transmute()`
 ```{r, include=TRUE, echo=TRUE, size="scriptsize"}
 transmute(flights,
           gain = arr_delay - dep_delay,
@@ -275,7 +272,7 @@ transmute(flights,
 the data frame
 - Select all flights on January 1st with:
 ```{r, include=TRUE, echo=TRUE, size="scriptsize"}
-filter(flights, month == 1, day == 1)
+filter(flights, month == 7, day == 20)
 ```
 
 ## Select rows by position
@@ -287,9 +284,9 @@ slice(flights, 1:10)
 ```
 
 
-## Arrange rows with `arrange()`
+## Reorder rows with `arrange()`
 
-- `arrange()` works similarly to `filter()` except that instead of filtering or selecting rows, it reorders them.
+- `arrange()` works similarly to `filter()` except that instead of filtering or selecting rows, it *reorders* them.
 
 ```{r, include=TRUE, echo=TRUE, size="scriptsize"}
 arrange(flights, year, month, day)
@@ -309,7 +306,7 @@ rename(flights, tail_num = tailnum)
 ```
 
 
-## `Extract distinct (unique) rows`
+## Extract unique rows with `distinct`
 
 - A common use of `select()` is to find the values of a set of variables.
 - This is particularly useful in conjunction with the `distinct()` verb
@@ -320,34 +317,34 @@ distinct(select(flights, origin, dest))
 ```
 
 
-
-
 ## Summarise values with `summarise()`
 
 - The last verb is `summarise()`. It collapses a data frame to a single row.
 - You can use any function you like in `summarise()` so long as the function can take a vector of data and return a single number.
 ```{r, include=TRUE, echo=TRUE, size="scriptsize"}
-summarise(flights,
+flights %>% summarise(
           delay = mean(dep_delay, na.rm = TRUE))
 ```
 
 
 
-## dplyr aggregate functions
-- dplyr provides several helpful aggregate functions of its own, in addition to the ones that are already defined in R. These include:
-    - first(x) - The first element of vector x.
-    - last(x) - The last element of vector x.
-    - nth(x, n) - The nth element of vector x.
-    - n() - The number of rows in the data.frame or group of observations that summarise() describes.
-    - n_distinct(x) - The number of unique values in vector x.
+## `dplyr` aggregate functions
+- `dplyr` provides several helpful aggregate functions of its own, in addition to the ones that are already defined in R. These include:
+    - `first(x)` - The first element of vector `x`.
+    - `last(x)` - The last element of vector `x`.
+    - `nth(x, n)` - The nth element of vector `x`.
+    - `n()` - The number of rows in the data.frame or group of observations that `summarise()` describes.
+    - `n_distinct(x)` - The number of unique values in vector `x`.
 
 ## Chaining
-- The dplyr API is functional --- function calls don't have
+- The `dplyr` API is functional --- function calls don't have
 side-effects.
 - You must always save their results. \alert{UGLY}
-- To get around this problem, dplyr provides the `%>%` operator
+- To get around this problem, `dplyr` provides the `%>%` operator
 - `x %>% f(y)` turns into `f(x, y)`
-```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE}
+
+## Chaining example
+```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE, message=FALSE}
 flights %>%
 group_by(year, month, day) %>%
 select(arr_delay, dep_delay) %>%
@@ -369,7 +366,7 @@ simple steps to achieve a complex result.
 ## Grouped operations
 
 - These verbs are useful on their own, but they become really powerful when you apply them to groups of observations
-- In dplyr, you do this by with the `group_by()` function.
+- In `dplyr`, you do this by with the `group_by()` function.
 - It breaks down a dataset into specified groups of rows.
 
 ## Grouped operations (cont.)
@@ -377,7 +374,7 @@ simple steps to achieve a complex result.
 - Grouping affects the verbs as follows:
   - grouped `select()` is the same as ungrouped `select()`, except that grouping variables are always retained.
 - grouped `arrange()` orders first by the grouping variables
-- `mutate()` and `filter()` are most useful in conjunction with window functions (like `rank()`, or `min(x) =` x=). They are described in detail in `vignette("window-functions")`.
+- `mutate()` and `filter()` are most useful in conjunction with window functions (like `rank()`, or `min(x) =` ). They are described in detail in `vignette("window-functions")`.
 - `sample_n()` and `sample_frac()` sample the specified number/fraction of rows in each group.
 - `slice()` extracts rows within each group.
 - `summarise()` is powerful and easy to understand, as described in more detail below.
@@ -394,16 +391,16 @@ flights %>%
 
 
 ## Multiple table verbs
-- dplyr implements the four most useful SQL joins:
-- `inner_join(x, y)`: matching x + y
-- `left_join(x, y)`: all x + matching y
-- `semi_join(x, y)`: all x with match in y
-- `anti_join(x, y)`: all x without match in y
+- `dplyr` implements the four most useful SQL joins:
+    - `inner_join(x, y)`: matching `x` + `y`
+    - `left_join(x, y)`: all `x` + matching `y`
+    - `semi_join(x, y)`: all `x` with match in `y`
+    - `anti_join(x, y)`: all `x` without match in `y`
 
 - And provides methods for:
-- `intersect(x, y)`: all rows in both x and y
-- `union(x, y)`: rows in either x or y
-- `setdiff(x, y)`: rows in x, but not y
+    - `intersect(x, y)`: all rows in both `x` and `y`
+    - `union(x, y)`: rows in either `x` or `y`
+    - `setdiff(x, y)`: rows in `x`, but not `y`
 
 ## Joins from `dplyr` Map to SQL
 - `inner_join(x, y)`
