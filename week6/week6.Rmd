@@ -75,6 +75,7 @@ iris$Sepal.Length %<>% sqrt
 - The two most important properties of tidy data are:
     - Each column is a variable.
     - Each row is an observation.
+- Check [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) book.
 
 ## Sample data
 - `tidyr` is a member of the core `tidyverse`.
