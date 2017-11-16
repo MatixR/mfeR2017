@@ -78,8 +78,15 @@ iris$Sepal.Length %<>% sqrt
 - Check [R for Data Science](http://r4ds.had.co.nz/tidy-data.html) book.
 
 ## Sample data
+- A common problem is a dataset where some of the column names are not names of variables, but values of a variable. 
+- Take `table4a`: the column names `1999` and `2000` represent values of the `year` variable, and each row represents two observations, not one.
 - `tidyr` is a member of the core `tidyverse`.
-```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE, message=FALSE}
+```{r,warning=FALSE, message=FALSE}
+library(tidyverse)
+table4a
+```
+
+```{r, include=FALSE, echo=FALSE, size="scriptsize", eval=TRUE, warning=FALSE, message=FALSE}
 library(tidyverse)
 set.seed(1234)
 stocks <- data.frame(
@@ -92,18 +99,47 @@ head(stocks, n = 4)
 ```
 
 ## Bring columns together with `gather()`
+- To tidy a dataset like this, we need to **gather** those columns into a new pair of variables. To describe that operation we need three parameters:
+    - The set of columns that represent values, not variables. In this example, those are the columns `1999` and `2000`.
+    - The name of the variable whose values form the column names. I call that the `key`, and here it is `year`.
+    - The name of the variable whose values are spread over the cells. I call that `value`, and here it’s the number of `cases`.
 
-```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE}
+## Bring columns together with `gather()`
+- In the final result, the gathered columns are dropped, and we get new `key` and `value` columns. 
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+    
+
+```{r, include=FALSE, echo=FALSE, size="scriptsize", eval=TRUE, warning=FALSE}
 stocksm <- stocks %>% gather(stock, price, -time)
 stocksm
 ```
 
 
 ## Split a column with `spread()`
+- Spreading is the opposite of gathering. You use it when an observation is scattered across multiple rows. 
+- For example, take `table2`: an observation is a country in a year, but each observation is spread across two rows.
 
-```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE}
+```{r}
+table2
+```
+
+```{r, include=FALSE, echo=FALSE, size="scriptsize", eval=TRUE, warning=FALSE}
 stocksm %>% spread(stock, price)
 stocksm %>% spread(time, price)
+```
+
+## `spread`ing
+- To tidy this up, we first analyse the representation in similar way to `gather()`. This time, however, we only need two parameters:
+    - The column that contains variable names, the `key` column. Here, it’s `type`.
+    - The column that contains values forms multiple variables, the `value` column. Here it’s `count`.
+
+## `spread`ing
+- Once we've figured that out, we can use `spread()`, as shown below
+```{r}
+spread(table2, key = type, value = count)
 ```
 
 
@@ -118,7 +154,8 @@ df %>% spread(x, y) %>% gather(x, y, a:b, na.rm = TRUE)
 
 ## There's much more
 
-- As usual, read the [vignette](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) on the CRAN page
+- As usual, read the [vignette](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) on the CRAN page.
+- Also check [Chapter 12](http://r4ds.had.co.nz/tidy-data.html) of R for Data Science book.
 
 # `dplyr`
 
