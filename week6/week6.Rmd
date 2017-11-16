@@ -7,7 +7,7 @@ output:
     includes:
       in_header: ../slide_header.tex
     keep_tex: false
-subtitle: dplyr
+subtitle: Week 6
 slide_level: 2
 ---
 
@@ -68,24 +68,26 @@ iris$Sepal.Length %<>% sqrt
 ## Hadley Wickham
 
 - [Hadley Wickham](http://had.co.nz) is practically famous in the R world
-- He's developed a ridiculous number of useful packages
-- e.g. `ggplot2` and `lubridate`
-- Today we will look at `dplyr` and `tidyr`
-
+- He's developed a very large number of useful packages, e.g. `ggplot2` and `lubridate`.
+- Today we will look at `dplyr` and `tidyr`.
+- Tidy data is data that’s easy to work with: it’s easy to munge (with `dplyr`), visualise (with `ggplot2` or `ggvis`) 
+  and model (with `R`’s hundreds of modelling packages). 
+- The two most important properties of tidy data are:
+    - Each column is a variable.
+    - Each row is an observation.
 
 ## Sample data
-
-```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE}
-library(tidyr)
-
+- `tidyr` is a member of the core `tidyverse`.
+```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE, message=FALSE}
+library(tidyverse)
+set.seed(1234)
 stocks <- data.frame(
-time = as.Date('2009-01-01') + 0:9,
-X = rnorm(10, 0, 1),
-Y = rnorm(10, 0, 2),
-Z = rnorm(10, 0, 4)
+time = as.Date('2009-01-01') + 0:4,
+X = rnorm(5, 0, 1),
+Y = rnorm(5, 0, 2),
+Z = rnorm(5, 0, 4)
 )
-
-stocks
+head(stocks, n = 4)
 ```
 
 ## Bring columns together with `gather()`
@@ -107,7 +109,8 @@ stocksm %>% spread(time, price)
 ## `spread()` and `gather()` are complements
 
 ```{r, include=TRUE, echo=TRUE, size="scriptsize", eval=TRUE, warning=FALSE}
-df <- data.frame(x = c("a", "b"), y = c(3, 4), z = c(5, 6))
+df <- data.frame(x = c("a", "b"), y = c(3, 4), 
+                 z = c(5, 6))
 df
 df %>% spread(x, y) %>% gather(x, y, a:b, na.rm = TRUE)
 ```
@@ -378,35 +381,33 @@ flights %>%
 - `anti_join(x, y)`
     - `SELECT * FROM x WHERE NOT EXISTS (SELECT 1 FROM y WHERE x.a = y.a)`
 
-## `dplyr` Works with Databases
-- See `vignette("databases")`.
-- `dplyr` SQL connections:
-    - `src_sqlite()`, `sql_mysql()`, `sql_postgres()`
-- First, we establish a connection:
-```{r, eval=FALSE}
-library(DBI)
-con <- src_mysql(dbname = "dbname", # database name
-                 host = "IP_or_WebAddress", 
-                 port = 3306, # port is 3306 by default
-                 user = "username",
-                 password = "password")
-```
+<!-- ## `dplyr` Works with Databases -->
+<!-- - See `vignette("databases")`. -->
+<!-- - `dplyr` SQL connections: -->
+<!--     - `src_sqlite()`, `sql_mysql()`, `sql_postgres()` -->
+<!-- - First, we establish a connection: -->
+<!-- ```{r, eval=FALSE} -->
+<!-- library(DBI) -->
+<!-- con <- src_mysql(dbname = "dbname", # database name -->
+<!--                  host = "IP_or_WebAddress",  -->
+<!--                  port = 3306, # port is 3306 by default -->
+<!--                  user = "username", -->
+<!--                  password = "password") -->
+<!-- ``` -->
 
-## Sample `dplyr` Database Commands
-```{r, eval=FALSE}
-# View tables in the Database
-src_tbls(con)
-# Create table references
-flights <- tbl(con, "flights")
-planes <- tbl(con, "planes")
-# Manipulate tables
-flights <- left_join(flights, planes, by = "tailnum")
-# Collect results
-flights <- collect(flights)
-```
+<!-- ## Sample `dplyr` Database Commands -->
+<!-- ```{r, eval=FALSE} -->
+<!-- # View tables in the Database -->
+<!-- src_tbls(con) -->
+<!-- # Create table references -->
+<!-- flights <- tbl(con, "flights") -->
+<!-- planes <- tbl(con, "planes") -->
+<!-- # Manipulate tables -->
+<!-- flights <- left_join(flights, planes, by = "tailnum") -->
+<!-- # Collect results -->
+<!-- flights <- collect(flights) -->
+<!-- ``` -->
 
-<!-- ## Lab 3 -->
-<!-- \begin{center} -->
-<!-- \Large Let's work on Lab 3. -->
-<!-- \end{center} -->
+## Lab 3
+- \Large Let's redo \href{https://github.com/brettdunn/mfeR2017/blob/master/week5/Lab/Lab3.pdf}{Lab 3} with `dplyr`.
 
