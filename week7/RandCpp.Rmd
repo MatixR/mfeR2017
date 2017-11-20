@@ -15,7 +15,7 @@ slide_level: 2
 - R is great, but it has some weaknesses.
     - For example, loops can be slow.
 - It is sometimes desirable to call code written in other languages from R.
-- Also, you may want to call R from a another language.
+- Also, you may want to call R from another language.
 - R interfaces have been developed for a number of other languages
     - We will focus on C/C++.
 - The main motivation in performance enhancement.
@@ -93,8 +93,8 @@ value_in <- 32; value_out <- 0
 dyn.unload("./examples/timesTwo.dll")
 ```
 - `dyn.load` loads the .dll into R
-- `.C` calls timesTwo, and passes value_in and value_out to the function
-    - `.C` returns a list, so we define 'result' and extract 'result' from the list
+- `.C` calls timesTwo, and passes `value_in` and `value_out` to the function.
+    - `.C` returns a list, so we define 'result' and extract 'result' from the list.
 - `dyn.unload` unloads the .dll from R (you need the unload the dll if you want to rebuild it).
 
 ## Wapper Functions
@@ -111,7 +111,7 @@ dyn.unload("./examples/timesTwo.dll")
 ```
 
 ## Using R's Library
-- You can access C versions of many basic R functions, including dnorm(), rnorm(), etc.
+- You can access C versions of many basic R functions, including `dnorm()`, `rnorm()`, etc.
 - A nice reference is [here](http://www.biostat.jhsph.edu/~bcaffo/statcomp/files/cprog3_ho.pdf).
 ```{Rcpp, eval=FALSE}
 /*randNorm.c*/
@@ -125,7 +125,7 @@ void randNorm(double *out)
 }
 ```
 
-## Running randNorm in R
+## Running `randNorm` in R
 ```{r}
 system("R CMD SHLIB ./examples/randNorm.c")
 dyn.load("./examples/randNorm.dll")
@@ -149,7 +149,7 @@ void cumsum(double *x, int *n, double *res) {
 }
 ```
 
-## Running cumsum in R
+## Running `cumsum` in R
 ```{r}
 system("R CMD SHLIB ./examples/vec.c")
 dyn.load("./examples/vec.dll")
@@ -178,7 +178,7 @@ extern "C" {
 ```
 
 ## Using C++11: Set USE_CXX1X to some value
-- The USE_CXX1X allows us to use the C++11 standard.
+- The `USE_CXX1X` allows us to use the C++11 standard.
 ```{r}
 Sys.setenv(USE_CXX1X = "NA")
 system("R CMD SHLIB ./examples/randC11.cpp")
@@ -287,7 +287,7 @@ EXPORTS
 - we 
 - When building your DLL, you typically create a header file that contains the functions you are exporting and add `__declspec(dllexport)` to the declarations in the header file.
 - For more information, see [this.](https://msdn.microsoft.com/en-us/library/a90k134d.aspx)
-- Instead of `__declspec(dllexport)`, you can use a [DEF file.](https://msdn.microsoft.com/en-us/library/d91k01sh.aspx)
+- Instead of `__declspec(dllexport)`, you can use a [DEF file](https://msdn.microsoft.com/en-us/library/d91k01sh.aspx).
     
     
 ## Build the Solution
@@ -424,12 +424,19 @@ extern "C" void randNorm(double *out)
 
 # Rcpp
 
-## Rcpp
+## `Rcpp`
+- Written by [Dirk Eddelbuettel](http://dirk.eddelbuettel.com/code/rcpp.html).
 - I wanted to show you how build a DLL in Visual Studio, because it can be useful for more complicated projects
 - Often it is easiest to use the Rcpp package instead.
-- RCpp makes it easy to pass vectors, matrices, lists, ect, back to R.
+- `RCpp` makes it easy to pass vectors, matrices, lists, ect, back to R.
     - However, there is overhead in doing this.
     - If you are concerned about speed, consider using the simplest structure.
+- Resources:
+    - [Rcpp book](http://www.rcpp.org/book/) by Dirk Eddelbuettel. Can be downloaded from [SpringerLink](https://link.springer.com/book/10.1007/978-1-4614-6868-4).
+    - [Advanced R](http://adv-r.had.co.nz/) by Hadley Wickham: [Rcpp](http://adv-r.had.co.nz/Rcpp.html) and [R’s C interface](http://adv-r.had.co.nz/C-interface.html) chapetrs.
+    - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html) from CRAN.
+
+
 
 ## Rcpp Example
 1. In RStudio, File / New File / C++ File.
@@ -449,10 +456,10 @@ timesTwo(c(32,64))
 ```
 
 
-## Resources
-http://adv-r.had.co.nz/C-interface.html
+<!-- ## Resources -->
+<!-- http://adv-r.had.co.nz/C-interface.html -->
 
-https://cran.r-project.org/doc/manuals/r-release/R-exts.html
+<!-- https://cran.r-project.org/doc/manuals/r-release/R-exts.html -->
 
 ## Lab 4
 \begin{center}
