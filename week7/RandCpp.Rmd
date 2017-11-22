@@ -428,17 +428,18 @@ extern "C" void randNorm(double *out)
 - Written by [Dirk Eddelbuettel](http://dirk.eddelbuettel.com/code/rcpp.html).
 - I wanted to show you how build a DLL in Visual Studio, because it can be useful for more complicated projects
 - Often it is easiest to use the Rcpp package instead.
-- `RCpp` makes it easy to pass vectors, matrices, lists, ect, back to R.
+- `Rcpp` makes it easy to pass vectors, matrices, lists, ect, back to R.
     - However, there is overhead in doing this.
     - If you are concerned about speed, consider using the simplest structure.
 - Resources:
-    - [Rcpp book](http://www.rcpp.org/book/) by Dirk Eddelbuettel. Can be downloaded from [SpringerLink](https://link.springer.com/book/10.1007/978-1-4614-6868-4).
+    - [Rcpp book](http://www.rcpp.org/book/) by Dirk Eddelbuettel. Can download it from [SpringerLink](https://link.springer.com/book/10.1007/978-1-4614-6868-4) on UCLA network.
     - [Advanced R](http://adv-r.had.co.nz/) by Hadley Wickham: [Rcpp](http://adv-r.had.co.nz/Rcpp.html) and [R’s C interface](http://adv-r.had.co.nz/C-interface.html) chapetrs.
+    - [Rcpp Gallery](http://gallery.rcpp.org/): Articles and code examples for the `Rcpp` package.
     - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html) from CRAN.
 
 
 
-## Rcpp Example
+## `Rcpp` Example
 1. In RStudio, File / New File / C++ File.
 2. Enter code in timesTwoRcpp.cpp
 ```{Rcpp, eval=FALSE}
@@ -455,6 +456,55 @@ Rcpp::sourceCpp("./examples/timesTwoRcpp.cpp")
 timesTwo(c(32,64))
 ```
 
+## Loops are very slow in R
+- One big difference between R and C++ is that the cost of loops is much lower in C++. 
+- Let's compare 
+```{r, message=FALSE,warning=FALSE}
+sumR <- function(x) {
+  total <- 0
+  for (i in seq_along(x)) {
+    total <- total + x[i]
+  }
+  total
+}
+```
+
+## In C++ loops have very little overhead
+  
+```{r,message=FALSE,warning=FALSE}
+library(Rcpp)
+cppFunction('double sumC(NumericVector x) {
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i];
+  }
+  return total;
+}')
+
+```
+
+## C++ vs. R
+- The C++ version is similar, but:
+    - To find the length of the vector, we use the `.size()` method, which returns an integer. C++ methods are called with `.` (i.e., a full stop).
+    - The `for` statement has a different syntax: `for(init; check; increment)`. This loop is initialised by creating a new variable called `i` with
+    value 0. Before each iteration we check that `i < n`, and terminate the loop if it's not. After each iteration, we increment the value of `i` by
+    one, using the special prefix operator `++` which increases the value of `i` by 1.
+    - **IN C++, VECTOR INDICES START AT 0!** This is a very common source of bugs when converting R functions to C++.
+    - Use `=` for assignment, not `<-`.
+    - C++ provides operators that modify in-place: `total += x[i]` is equivalent to `total = total + x[i]`. Similar in-place operators are `-=`, `*=`,
+    and `/=`.
+
+## Bechmarking
+- In this example C++ is much more efficient than R:
+    - `sumC()` is competitive with the highly optimized built-in `sum()`,
+    - `sumR()` is several orders of magnitude slower.
+
+```{r,message=FALSE,warning=FALSE}
+library(microbenchmark)
+x <- runif(2000)
+microbenchmark(sum(x), sumC(x), sumR(x))
+```
 
 <!-- ## Resources -->
 <!-- http://adv-r.had.co.nz/C-interface.html -->
