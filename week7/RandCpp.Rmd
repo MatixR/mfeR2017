@@ -438,7 +438,7 @@ extern "C" void randNorm(double *out)
     - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html) from CRAN.
 
 
-## Loops are very slow in R
+## Example: Vector input, scalar output
 - One big difference between R and C++ is that the cost of loops is much lower in C++. 
 - Let's compare 
 ```{r, message=FALSE,warning=FALSE}
@@ -451,8 +451,8 @@ sumR <- function(x) {
 }
 ```
 
-## In C++ loops have very little overhead
-  
+## Use `cppFunction()`
+- `cppFunction()` allows you to write C++ functions in R:  
 ```{r,message=FALSE,warning=FALSE}
 library(Rcpp)
 cppFunction('double sumC(NumericVector x) {
@@ -465,6 +465,7 @@ cppFunction('double sumC(NumericVector x) {
 }')
 
 ```
+- When you run this code, `Rcpp` will compile the C++ code and construct an R function that connects to the compiled C++ function.
 
 ## C++ vs. R
 - The C++ version is similar, but:
@@ -477,7 +478,7 @@ cppFunction('double sumC(NumericVector x) {
     - C++ provides operators that modify in-place: `total += x[i]` is equivalent to `total = total + x[i]`. Similar in-place operators are `-=`, `*=`,
     and `/=`.
 
-## Bechmarking
+## Bechmarking: In C++ loops are much faster than R
 - In this example C++ is much more efficient than R:
     - `sumC()` is competitive with the highly optimized built-in `sum()`,
     - `sumR()` is several orders of magnitude slower.
