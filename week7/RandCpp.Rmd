@@ -438,24 +438,6 @@ extern "C" void randNorm(double *out)
     - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html) from CRAN.
 
 
-
-## `Rcpp` Example
-1. In RStudio, File / New File / C++ File.
-2. Enter code in timesTwoRcpp.cpp
-```{Rcpp, eval=FALSE}
-#include <Rcpp.h>
-// [[Rcpp::export]]
-Rcpp::NumericVector timesTwo(Rcpp::NumericVector x) {
-  return x * 2;
-}
-```
-3. In R,
-```{r, warning=FALSE}
-library(Rcpp)
-Rcpp::sourceCpp("./examples/timesTwoRcpp.cpp")
-timesTwo(c(32,64))
-```
-
 ## Loops are very slow in R
 - One big difference between R and C++ is that the cost of loops is much lower in C++. 
 - Let's compare 
@@ -510,6 +492,71 @@ microbenchmark(sum(x), sumC(x), sumR(x))
 <!-- http://adv-r.had.co.nz/C-interface.html -->
 
 <!-- https://cran.r-project.org/doc/manuals/r-release/R-exts.html -->
+
+## Using `sourceCpp`
+- So far, we’ve used inline C++ with `cppFunction()`. 
+- For real problems, it’s usually easier to use stand-alone C++ files and then source them into R using `sourceCpp()`. 
+<!-- - This lets you take advantage of text editor support for C++ files (e.g., syntax highlighting) as well as making it easier to identify the line numbers in compilation errors. -->
+- Your stand-alone C++ file should have extension .cpp, and needs to start with:
+```{Rcpp, eval=FALSE}
+#include <Rcpp.h>
+using namespace Rcpp;
+```
+- And for each function that you want available within R, you need to prefix it with:
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+```
+- In RStudio File/New File/C++ File does these steps for you.
+
+## Compile the C++ code
+- To compile the C++ code, use `sourceCpp("path/to/file.cpp")`. 
+- This will create the matching R functions and add them to your current session. 
+- Note that these functions can not be saved in a `.Rdata` file and reloaded in a later session; they must be recreated each time you restart R. 
+- You can embed R code in special C++ comment blocks.
+```{Rcpp, eval=FALSE}
+/*** R
+# This is R code
+*/
+```
+
+## Example: `meanC` vs. the built-in `mean()`:
+<!-- - Running `sourceCpp()` on the following file implements mean in C++ (`meanC`) and then compares it to the built-in `mean()`: -->
+```{Rcpp, eval=FALSE}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+double meanC(NumericVector x) {
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i];
+  }
+  return total / n;
+}
+/*** R
+library(microbenchmark)
+x <- runif(1e5)
+microbenchmark(mean(x),meanC(x))
+*/
+```
+
+## Another `Rcpp` Example
+1. In RStudio, File / New File / C++ File.
+2. Enter code in timesTwoRcpp.cpp
+```{Rcpp, eval=FALSE}
+#include <Rcpp.h>
+// [[Rcpp::export]]
+Rcpp::NumericVector timesTwo(Rcpp::NumericVector x) {
+  return x * 2;
+}
+```
+3. In R,
+```{r, warning=FALSE}
+library(Rcpp)
+Rcpp::sourceCpp("./examples/timesTwoRcpp.cpp")
+timesTwo(c(32,64))
+```
 
 ## Lab 4
 \begin{center}
