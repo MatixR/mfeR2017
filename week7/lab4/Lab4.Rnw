@@ -15,6 +15,7 @@
 \usepackage{wasysym,setspace}
 \usepackage{amssymb}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue,anchorcolor=blue]{hyperref}
+% \setlength\parindent{0pt}
 \tolerance=1000
 \usepackage[hmargin=1in, vmargin = 1in]{geometry}
 \author{Brett Dunn and Mahyar Kargar}
@@ -46,27 +47,26 @@ the price at time $T$ (under the risk-neutral pricing measure, which
 you will learn about in your derivatives class) can be modeled as:
 
 \begin{equation*}
-S_{T} = S_{0}\,e^{\left(r-\frac{1}{2}\sigma^{2}\right)T+ \sigma B_T}
+S_{T} = S_{0}\,e^{\left(r-\frac{1}{2}\sigma^{2}\right)T+ \sigma B_T},
 \end{equation*}
+where $B_T\sim\mathcal{N}(0,T)$ is a normal random variable with zero mean and \emph{variance} equal to $T$. 
 
-Where $B_T\sim\mathcal{N}(0,T)$ is a normal random variable with zero mean and \emph{variance} equal to $T$. 
-
-Given that a call option pays off, $\max\{ 0,S_{T}-K \}$, we can evalute the
+Given that a call option with maturity $T$ and strike price $K$ has pay off equal to $\max\{ 0,S_{T}-K \}$, we can evalute the
 price of the option using Monte Carlo simulation as the discounted expected
 payoff in a few simple steps:
 
 \begin{enumerate}
 \item Generate a large number (say 10,000) of random values for the
-terminal stock price $S_{T}$
-\item Evaluate the option price at each terminal price
-\item Average over the option prices
-\item Discount this expected final value by multiplying by $e^{-rT}$
+terminal stock price $S_{T}$.
+\item Evaluate the option price at each terminal price.
+\item Average over the option prices.
+\item Discount this expected final value by multiplying by $e^{-rT}$.
 \end{enumerate}
 
 These steps are equivalent to evaluation of:
 
 \begin{equation*}
-\mathbb{E} \left[ e^{-rT} \max \{ 0, S_T - K \} \right]
+\mathbb{E}^{\mathbb{Q}} \left[ e^{-rT} \max \{ 0, S_T - K \} \right]
 \end{equation*}
 
 Write these steps into a R function and check the results with the
