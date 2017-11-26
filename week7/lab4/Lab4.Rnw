@@ -12,14 +12,14 @@
 \usepackage{amsmath}
 \usepackage{textcomp}
 \usepackage{marvosym}
-\usepackage{wasysym}
+\usepackage{wasysym,setspace}
 \usepackage{amssymb}
-\usepackage{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue,anchorcolor=blue]{hyperref}
 \tolerance=1000
 \usepackage[hmargin=1in, vmargin = 1in]{geometry}
-\author{Brett R. Dunn}
-\date{November 28, 2015}
-\title{2016 R MFE Programming Workshop Lab 4}
+\author{Brett Dunn and Mahyar Kargar}
+\date{\today}
+\title{2017 R MFE Programming Workshop Lab 4}
 \hypersetup{
   pdfkeywords={},
   pdfsubject={},
@@ -28,30 +28,31 @@
 \SweaveOpts{concordance=TRUE}
 
 \maketitle
-
+\onehalfspacing
 \section{Black-Scholes Formula}
 \label{sec-1}
-\begin{itemize}
-\item The file \emph{optionsdata.csv} contains the parameters for various
+% \begin{itemize}
+% \item 
+The file \emph{optionsdata.csv} contains the parameters for various
 options. Read in this file and compute the Black-Scholes price for
-these options (you did this in week 1).
-\end{itemize}
+these options (you did this for lab 1 in week 2).
+% \end{itemize}
 
 \section{Monte Carlo Option Pricing in R}
 \label{sec-2}
 
-Assuming that a stock starts at price S$_{\text{0}}$, one random realization of
+Assuming that a stock starts at price $S_0$, one random realization of
 the price at time $T$ (under the risk-neutral pricing measure, which
 you will learn about in your derivatives class) can be modeled as:
 
 \begin{equation*}
-S_{T} = S_{0} e^{(r-\sigma^{2}/2)T+z \sigma \sqrt{T}}
+S_{T} = S_{0}\,e^{\left(r-\frac{1}{2}\sigma^{2}\right)T+ \sigma B_T}
 \end{equation*}
 
-Where z is a standard normal random variable. 
+Where $B_T\sim\mathcal{N}(0,T)$ is a normal random variable with zero mean zero and \emph{variance} equal to $T$. 
 
-Given that a call option pays off $max\{ 0,S_{T}-K \}$, we can evalute the
-price of the option using Monte Carlo as the discounted expected
+Given that a call option pays off, $\max\{ 0,S_{T}-K \}$, we can evalute the
+price of the option using Monte Carlo simulation as the discounted expected
 payoff in a few simple steps:
 
 \begin{enumerate}
@@ -65,11 +66,11 @@ terminal stock price $S_{T}$
 These steps are equivalent to evaluation of:
 
 \begin{equation*}
-E \left[ e^{-rT} max \{ 0, S_T - K \} \right]
+\mathbb{E} \left[ e^{-rT} \max \{ 0, S_T - K \} \right]
 \end{equation*}
 
 Write these steps into a R function and check the results with the
-closed form solution from the previous exercise. 
+closed form solution from the Section \ref{sec-1} above. 
 
 \section{Monte Carlo Option Pricing in C/C++}
 \label{sec-3}
