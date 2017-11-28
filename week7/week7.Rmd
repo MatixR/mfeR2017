@@ -43,7 +43,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 Typical bottlenecks that C++ can address include:
 
-- Loops that can’t be easily vectorised because subsequent iterations depend on previous ones. Particularly nested loops.
+- Loops that can’t be easily vectorized because subsequent iterations depend on previous ones. Particularly nested loops.
 
 - Recursive functions, or problems which involve calling functions millions of times.
     - The overhead of calling a function in C++ is much lower than that in R.
@@ -66,15 +66,15 @@ Typical bottlenecks that C++ can address include:
     - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html)
     - [Advanced R](http://adv-r.had.co.nz/C-interface.html) by Hadley Wickham
 
-- These interfaces are time-consuming to learn, but the Rcpp package provides a much simpler interface.
+- These interfaces are time-consuming to learn, but the `Rcpp` package provides a much simpler interface.
 
 
 ## `Rcpp`
 - The `Rcpp` package is a fantastic tool written by Dirk Eddelbuettel and Romain François (with key contributions by Doug Bates, John Chambers, and J.J. Allaire).
 
-- Rcpp makes it very simple to connect C++ to R.
+- `Rcpp` makes it very simple to connect C++ to R.
 
-- Rcpp makes it easy to pass R objects like vectors, matrices, and lists to C++ and back to R.
+- `Rcpp` makes it easy to pass R objects like vectors, matrices, and lists to C++ and back to R.
     - However, there is overhead in doing this.
     - If you are concerned about speed, consider using the simplest structure.
 
@@ -83,8 +83,8 @@ Typical bottlenecks that C++ can address include:
 
 - `Rcpp` is a CRAN package, but it requires an additional tool chain of a compiler, linker and more in order to be able to create binary object code extending R.
 
-- On Linux all required components are likely to be present. For MacOS, you will need to install the "command line tools " from the `Xcode` developer package (free) and you may want to install a version of gfortran. 
-    - See Rcpp FAQ sections 2.10 and 2.16 if you encounter problems with macOS.
+- On Linux all required components are likely to be present. For macOS, you will need to install the "command line tools" from the `Xcode` developer package (free) and you may want to install a version of [gfortran](https://gcc.gnu.org/wiki/GFortranBinariesMacOS). 
+    - See [`Rcpp` FAQ](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-FAQ.pdf) sections 2.10 and 2.16 if you encounter problems with macOS.
 
 - On Windows, users need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
 
@@ -95,9 +95,9 @@ install.packages('Rcpp')
 
 ## First Steps
 - Three key functions:
-    - `evalCpp()`
-    - `sourceCpp()`
-    - `cppFunction()`
+    1. `evalCpp()`
+    2. `sourceCpp()`
+    3. `cppFunction()`
   
 ## Basic Usage: `evalCpp()`
 - `evalCpp()` evaluates a single C++ expression. Includes and dependencies can be declared.
@@ -119,7 +119,7 @@ evalCpp("std::numeric_limits<double>::max()")
 cppFunction("
   int simpleExample() {
     int x = 10;
-    return x;
+    return 2.0*x;
 }")
 simpleExample() # same identifier as C++ function
 ```
@@ -128,13 +128,14 @@ simpleExample() # same identifier as C++ function
 ## Basic Usage: `cppFunction()` with C++11
 - C++11 is the ISO C++ standard ratified in 2011, and it provides many new features over C++98 or C++03.
 - To use C++11 code in R, we add `plugins=c("cpp11")`.
-- May nee to run `Sys.setenv("PKG_CXXFLAGS"="-std=c++11")` first.
-```{r}
+- May need to run this first: `Sys.setenv("PKG_CXXFLAGS"="-std=c++11")`
+- See [First steps in using C++11 with Rcpp](http://gallery.rcpp.org/articles/first-steps-with-C++11/).
+```{r, size="small"}
 Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
 cppFunction("
   int exampleCpp11() {
     auto x = 10;
-    return x;
+    return 2.0*x;
 }",plugins=c("cpp11"))
 
 exampleCpp11() # same identifier as C++ function
@@ -142,7 +143,7 @@ exampleCpp11() # same identifier as C++ function
 
 ## Basic Usage: `sourceCpp()`
 - `sourceCpp()` is the actual workhorse behind `evalCpp()` and `cppFunction()`. 
-- It is described in more detail in the [package vignette Rcpp-attributes](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-attributes.pdf).
+- It is described in more detail in the package vignette [Rcpp Attributes](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-attributes.pdf).
 - `sourceCpp()` builds on and extends `cxxfunction()` from package inline, but provides even more ease-of-use, control and helpers-–freeing us from boilerplate scaffolding.
 - A key feature are the plugins and dependency options: other packages can provide a plugin to supply require compile-time parameters  (`RcppArmadillo`, `RcppEigen`, `RcppGSL`)
 
@@ -190,11 +191,11 @@ So what just happened?
 - It operates on a numeric vector argument.
 - We asked `Rcpp` to ‘source it’ for us.
 - Behind the scenes Rcpp creates a wrapper.
-- Rcpp then compiles, links, and loads the wrapper.
+- `Rcpp` then compiles, links, and loads the wrapper.
 - The function is available in R under its C++ name.
 
-## Rcpp Data Types
-Rcpp defines several C++ data types that correspond with R data types:
+## `Rcpp` Data Types
+`Rcpp` defines several C++ data types that correspond with R data types:
 
 - `IntegerVector` for vectors of type integer.
 - `NumericVector` for vectors of type numeric.
@@ -251,7 +252,7 @@ NumericVector rcppNormals(int n) {
 In R:
 ```{r, size='footnotesize'}
 sourceCpp("./examples/rcppNormals.cpp")
-set.seed(18)
+set.seed(1234)
 rcppNormals(5)
 ```
 
@@ -271,7 +272,9 @@ sumR <- function(x) {
 ```
 
 ## Use `cppFunction()`
-- `cppFunction()` allows you to write C++ functions in R:  
+- `cppFunction()` allows you to write C++ functions in R.
+- When you run this code, `Rcpp` will compile the C++ code and construct an R function that connects to the compiled C++ function.
+
 ```{r,message=FALSE,warning=FALSE, size='small'}
 library(Rcpp)
 cppFunction('double sumC(NumericVector x) {
@@ -284,18 +287,15 @@ cppFunction('double sumC(NumericVector x) {
 }')
 
 ```
-- When you run this code, `Rcpp` will compile the C++ code and construct an R function that connects to the compiled C++ function.
 
-## C++ vs. R
+
+## C++ vs. R Syntax
 - The C++ version is similar, but:
     - To find the length of the vector, we use the `.size()` method, which returns an integer. C++ methods are called with `.` (i.e., a full stop).
-    - The `for` statement has a different syntax: `for(init; check; increment)`. This loop is initialised by creating a new variable called `i` with
-    value 0. Before each iteration we check that `i < n`, and terminate the loop if it's not. After each iteration, we increment the value of `i` by
-    one, using the special prefix operator `++` which increases the value of `i` by 1.
+    - The `for` statement has a different syntax: `for(init; check; increment)`. This loop is initialised by creating a new variable called `i` with      value 0. Before each iteration we check that `i < n`, and terminate the loop if it's not. After each iteration, we increment the value of `i` by     one, using the special prefix operator `++` which increases the value of `i` by 1.
     - **IN C++, VECTOR INDICES START AT 0!** This is a very common source of bugs when converting R functions to C++.
     - Use `=` for assignment, not `<-`.
-    - C++ provides operators that modify in-place: `total += x[i]` is equivalent to `total = total + x[i]`. Similar in-place operators are `-=`, `*=`,
-    and `/=`.
+    - C++ provides operators that modify in-place: `total += x[i]` is equivalent to `total = total + x[i]`. Similar in-place operators are `-=`, `*=`, and `/=`.
 
 ## Bechmarking: In C++ loops are much faster than R
 - In this example C++ is much more efficient than R:
@@ -375,12 +375,12 @@ microbenchmark(mean(x),meanC(x))
 
 
 ## Resources
-- Rcpp for Seamless R and C++ Integration: [Main Rcpp page](http://www.rcpp.org/).
-- [Rcpp book](http://www.rcpp.org/book/) by Dirk Eddelbuettel. Can download it from [SpringerLink](https://link.springer.com/book/10.1007/978-1-4614-6868-4) on UCLA network.
+- [Main Rcpp page](http://www.rcpp.org/): `Rcpp` for Seamless R and C++ Integration.
+- [`Rcpp` book](http://www.rcpp.org/book/) by Dirk Eddelbuettel. Can download it for free from [SpringerLink](https://link.springer.com/book/10.1007/978-1-4614-6868-4) on the UCLA network.
 - [Advanced R](http://adv-r.had.co.nz/) by Hadley Wickham: [Rcpp](http://adv-r.had.co.nz/Rcpp.html) and [R’s C interface](http://adv-r.had.co.nz/C-interface.html) chapetrs.
-- [Rcpp Gallery](http://gallery.rcpp.org/): Articles and code examples for the `Rcpp` package.
+- [`Rcpp` Gallery](http://gallery.rcpp.org/): Articles and code examples for the `Rcpp` package.
 - [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html) from CRAN.
-- [Extending R](https://www.crcpress.com/Extending-R/Chambers/p/book/9781498775717) book.
+- [Extending R](https://www.crcpress.com/Extending-R/Chambers/p/book/9781498775717) by John M. Chambers.
 
 
 <!-- ## Lab 4 -->
