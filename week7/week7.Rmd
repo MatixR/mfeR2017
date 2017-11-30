@@ -105,7 +105,7 @@ install.packages('Rcpp')
 
 ```{r}
 library(Rcpp)
-evalCpp("2 + 2") # simple test
+evalCpp("exp(2)") # simple test
 ```
 
 ```{r}
@@ -190,9 +190,9 @@ So what just happened?
 - We defined a simple C++ function.
 - It operates on a numeric vector argument.
 - We asked `Rcpp` to ‘source it’ for us.
-- Behind the scenes Rcpp creates a wrapper.
+- Behind the scenes `Rcpp` creates a wrapper.
 - `Rcpp` then compiles, links, and loads the wrapper.
-- The function is available in R under its C++ name.
+- The function is available in R under its C++ name `timesTwo`.
 
 ## `Rcpp` Data Types
 `Rcpp` defines several C++ data types that correspond with R data types:
@@ -226,11 +226,13 @@ DataFrame timesTwoDF(NumericVector x) {
 }
 ```
 
+- **Note**: IN C++, VECTOR INDICES START AT **0**! This is a very common source of bugs.
+
 ## Example of `DataFrame` (Cont’ed)
 Now, we can source the code in R and use the function:
 ```{r}
 sourceCpp("./examples/timesTwoDF.cpp")
-x <- 1:3
+x <- 1:5
 df <- timesTwoDF(x)
 str(df)
 ```
@@ -293,7 +295,7 @@ cppFunction('double sumC(NumericVector x) {
 - The C++ version is similar, but:
     - To find the length of the vector, we use the `.size()` method, which returns an integer. C++ methods are called with `.` (i.e., a full stop).
     - The `for` statement has a different syntax: `for(init; check; increment)`. This loop is initialised by creating a new variable called `i` with      value 0. Before each iteration we check that `i < n`, and terminate the loop if it's not. After each iteration, we increment the value of `i` by     one, using the special prefix operator `++` which increases the value of `i` by 1.
-    - **IN C++, VECTOR INDICES START AT 0!** This is a very common source of bugs when converting R functions to C++.
+    <!-- - **IN C++, VECTOR INDICES START AT 0!** This is a very common source of bugs when converting R functions to C++. -->
     - Use `=` for assignment, not `<-`.
     - C++ provides operators that modify in-place: `total += x[i]` is equivalent to `total = total + x[i]`. Similar in-place operators are `-=`, `*=`, and `/=`.
 
