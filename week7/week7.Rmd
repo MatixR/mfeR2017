@@ -83,7 +83,7 @@ Typical bottlenecks that C++ can address include:
 
 - `Rcpp` is a CRAN package, but it requires an additional tool chain of a compiler, linker and more in order to be able to create binary object code extending R.
 
-- On Linux all required components are likely to be present. For macOS, you will need to install the "command line tools" from the `Xcode` developer package (free) and you may want to install a version of [gfortran](https://gcc.gnu.org/wiki/GFortranBinariesMacOS). 
+- On Linux all required components are likely to be present. For macOS, you will need to install the "command line tools" from the `Xcode` developer package (free) and you may want to install a version of [gfortran](https://gcc.gnu.org/wiki/GFortranBinaries). 
     - See [`Rcpp` FAQ](http://dirk.eddelbuettel.com/code/rcpp/Rcpp-FAQ.pdf) sections 2.10 and 2.16 if you encounter problems with macOS.
 
 - On Windows, users need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
