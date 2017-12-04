@@ -258,6 +258,14 @@ set.seed(1234)
 rcppNormals(5)
 ```
 
+## Benchmark with built-in `rnorm`
+```{r, size='footnotesize'}
+library(microbenchmark)
+n <- 1e5
+microbenchmark(rnorm(n),rcppNormals(n))
+```
+
+
 # More `Rcpp` Examples
 
 ## Example: Vector input, scalar output
